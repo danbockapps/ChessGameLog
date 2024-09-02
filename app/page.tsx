@@ -1,10 +1,20 @@
+import { createClient } from "./lib/supabase/server";
 
 export default async function Home() {
-  const data = await fetch('https://lichess.org/api/player').then(res => res.json());
+  console.time('fetch');
+  const lichessData = await fetch('https://lichess.org/api/player').then(res => res.json());
+  console.timeEnd('fetch');
+
+  const supabase = createClient()
+
+  const { data, error } = await supabase.auth.getUser()
+
+  console.log({data,error})
+
 
   return (
     <main>
-      {JSON.stringify(data)}
+      {JSON.stringify(lichessData)}
     </main>
   );
 }
