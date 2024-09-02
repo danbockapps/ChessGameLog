@@ -1,0 +1,1 @@
+find . \( -path './node_modules' -o -path './.next' \) -prune -o -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.css' -o -name '*.html'  \) -print | xargs wc -l
