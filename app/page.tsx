@@ -11,5 +11,9 @@ export default async function Home() {
 
   console.log({data, error})
 
+  const {data: users, error: usersError} = await supabase.from('profiles').select()
+
+  console.log({users, usersError})
+
   return <main>{JSON.stringify(lichessData)}</main>
 }

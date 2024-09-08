@@ -79,7 +79,6 @@ const SignUpPage: React.FC = () => {
                     setStatus('error')
                   } else {
                     setStatus('success')
-                    console.log('success', data)
                   }
                 })
                 .catch((error: Error) => {
