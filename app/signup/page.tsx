@@ -2,7 +2,7 @@
 
 import {AuthResponse} from '@supabase/supabase-js'
 import React, {useState} from 'react'
-import {createClient} from '../lib/supabase/client'
+import {createBrowserClient} from '../lib/supabase/client'
 import {Spinner} from '../ui/spinner'
 
 const SignUpPage: React.FC = () => {
@@ -19,7 +19,7 @@ const SignUpPage: React.FC = () => {
     setPassword(e.target.value)
   }
 
-  const supabase = createClient()
+  const supabase = createBrowserClient()
 
   const disabled = ['loading', 'success'].includes(status)
 

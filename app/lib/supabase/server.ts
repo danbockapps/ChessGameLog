@@ -1,11 +1,11 @@
 import {Database} from '@/app/database.types'
-import {createServerClient} from '@supabase/ssr'
+import {createServerClient as createServerClientSupabase} from '@supabase/ssr'
 import {cookies} from 'next/headers'
 
-export function createClient() {
+export function createServerClient() {
   const cookieStore = cookies()
 
-  return createServerClient<Database>(
+  return createServerClientSupabase<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
