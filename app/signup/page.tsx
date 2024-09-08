@@ -4,6 +4,7 @@ import {AuthResponse} from '@supabase/supabase-js'
 import React, {useState} from 'react'
 import {createBrowserClient} from '../lib/supabase/client'
 import {Spinner} from '../ui/spinner'
+import Button from '../ui/button'
 
 const SignUpPage: React.FC = () => {
   const [email, setEmail] = useState('')
@@ -63,7 +64,8 @@ const SignUpPage: React.FC = () => {
             </div>
           )}
 
-          <button
+          <Button
+            fullWidth
             onClick={(e) => {
               e.preventDefault()
               setStatus('loading')
@@ -89,10 +91,9 @@ const SignUpPage: React.FC = () => {
                 })
             }}
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center"
             {...{disabled}}>
             {status === 'loading' ? <Spinner /> : 'Sign Up'}
-          </button>
+          </Button>
         </form>
       </div>
     </div>
