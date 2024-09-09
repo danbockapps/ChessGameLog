@@ -1,6 +1,7 @@
 import {redirect} from 'next/navigation'
 import {createServerClient} from '../lib/supabase/server'
 import SignOutButton from '../ui/signOutButton'
+import Card from '../ui/card'
 
 export default async function PrivatePage() {
   const supabase = createServerClient()
@@ -17,6 +18,11 @@ export default async function PrivatePage() {
   return (
     <div>
       <p>Collections for {data.user.email}</p>
+      <div className="flex flex-wrap gap-4 p-4">
+        <Card className="w-96 h-48">hello</Card>
+        <Card className="w-96 h-48">hello</Card>
+        <Card className="w-96 h-48">hello</Card>
+      </div>
       <SignOutButton />
     </div>
   )

@@ -3,7 +3,6 @@
 import {AuthResponse} from '@supabase/supabase-js'
 import React, {useState} from 'react'
 import {createBrowserClient} from '../lib/supabase/client'
-import {Spinner} from '../ui/spinner'
 import Button from '../ui/button'
 
 const SignUpPage: React.FC = () => {
