@@ -1,8 +1,8 @@
 import {redirect} from 'next/navigation'
 import {createServerClient} from '../lib/supabase/server'
-import Card from '../ui/card'
 import CollectionCard from '../ui/collectionCard'
 import SignOutButton from '../ui/signOutButton'
+import CreateNew from './createNew'
 
 export default async function PrivatePage() {
   const supabase = createServerClient()
@@ -24,12 +24,7 @@ export default async function PrivatePage() {
           </CollectionCard>
         ))}
 
-        <Card className="w-96 h-48 flex items-center justify-center cursor-pointer">
-          <div className="text-center">
-            <div className="text-4xl">+</div>
-            <div>Create new collection</div>
-          </div>
-        </Card>
+        <CreateNew />
       </div>
       <SignOutButton />
     </div>
