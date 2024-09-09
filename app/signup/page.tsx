@@ -37,7 +37,8 @@ const SignUpPage: React.FC = () => {
               id="email"
               value={email}
               onChange={handleEmailChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2
+                focus:ring-blue-500"
               placeholder="Enter your email"
               {...{disabled}}
             />
@@ -51,7 +52,8 @@ const SignUpPage: React.FC = () => {
               id="password"
               value={password}
               onChange={handlePasswordChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2
+                focus:ring-blue-500"
               placeholder="Enter your password"
               {...{disabled}}
             />
