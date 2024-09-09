@@ -30,7 +30,6 @@
     "semi": false,
     "singleQuote": true,
     "printWidth": 100,
-    "bracketSpacing": false,
-    "bracketSameLine": true
+    "bracketSpacing": false
   }
 }

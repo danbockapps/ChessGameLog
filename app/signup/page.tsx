@@ -91,8 +91,9 @@ const SignUpPage: React.FC = () => {
                 })
             }}
             type="submit"
-            {...{disabled}}>
-            {status === 'loading' ? <Spinner /> : 'Sign Up'}
+            loading={status === 'loading'}
+          >
+            Sign Up
           </Button>
         </form>
       </div>
