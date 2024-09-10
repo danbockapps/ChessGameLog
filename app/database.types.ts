@@ -38,6 +38,38 @@ export type Database = {
           },
         ]
       }
+      games: {
+        Row: {
+          collection: string | null
+          created_at: string
+          id: number
+          pgn: string | null
+          url: string | null
+        }
+        Insert: {
+          collection?: string | null
+          created_at?: string
+          id?: number
+          pgn?: string | null
+          url?: string | null
+        }
+        Update: {
+          collection?: string | null
+          created_at?: string
+          id?: number
+          pgn?: string | null
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "games_collection_fkey"
+            columns: ["collection"]
+            isOneToOne: false
+            referencedRelation: "collections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           first_name: string | null

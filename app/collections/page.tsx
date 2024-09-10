@@ -17,7 +17,7 @@ export default async function PrivatePage() {
     <div className="min-h-screen bg-gradient-to-r from-gray-100 to-gray-200">
       <div className="flex flex-wrap gap-4 p-4">
         {collections?.map((c) => (
-          <CollectionCard key={c.id} title={c.name ?? ''}>
+          <CollectionCard key={c.id} id={c.id} title={c.name ?? ''}>
             {c.name}
           </CollectionCard>
         ))}
