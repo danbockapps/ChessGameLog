@@ -1,6 +1,6 @@
 import {redirect} from 'next/navigation'
 import {createServerClient} from '../lib/supabase/server'
-import CollectionCard from '../ui/collectionCard'
+import CollectionCard from './collectionCard'
 import CreateNew from './createNew'
 
 export default async function PrivatePage() {

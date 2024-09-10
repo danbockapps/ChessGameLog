@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import {FC} from 'react'
-import Card from './card'
+import Card from '../ui/card'
 
 interface Props {
   id: string
