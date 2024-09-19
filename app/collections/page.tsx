@@ -1,7 +1,7 @@
 import {redirect} from 'next/navigation'
 import {createServerClient} from '../lib/supabase/server'
+import CreateNew from '../ui/createNew/createNew'
 import CollectionCard from './collectionCard'
-import CreateNew from './createNew'
 
 export default async function PrivatePage() {
   const supabase = createServerClient()
