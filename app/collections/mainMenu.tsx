@@ -1,19 +1,18 @@
 'use client'
 
-import {FC, useEffect, useState} from 'react'
-import {createBrowserClient} from '../lib/supabase/client'
+import {User} from '@supabase/supabase-js'
 import {useRouter} from 'next/navigation'
-import {UserResponse} from '@supabase/supabase-js'
+import {FC, useState} from 'react'
+import {createBrowserClient} from '../lib/supabase/client'
 
-const MainMenu: FC = () => {
+interface Props {
+  user: User
+}
+
+const MainMenu: FC<Props> = (props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const supabase = createBrowserClient()
   const router = useRouter()
-  const [user, setUser] = useState<UserResponse>()
-
-  useEffect(() => {
-    supabase.auth.getUser().then(setUser)
-  }, [])
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -49,7 +48,7 @@ const MainMenu: FC = () => {
       {isMenuOpen && (
         <div className="absolute right-4 top-10 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg">
           <div className="p-4 border-b border-gray-200">
-            <p className="text-gray-700">{user?.data.user?.email}</p>
+            <p className="text-gray-700">{props.user.email}</p>
           </div>
           <button
             onClick={handleSignout}
