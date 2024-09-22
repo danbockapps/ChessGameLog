@@ -1,1 +1,2 @@
-supabase gen types typescript --project-id mhgkfnqcubztuvkstzqb > app/database.types.ts
+supabase gen types typescript --local > app/database.types.ts
+npx prettier --write app/database.types.ts

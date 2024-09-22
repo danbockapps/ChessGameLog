@@ -1,10 +1,11 @@
 import Image from 'next/image'
 import {FC} from 'react'
+import {Step, Type} from './createNewModal'
 import lichessLogo from './lichess.svg'
 
 interface Props {
-  setType: (type: 'manual' | 'chesscom' | 'lichess') => void
-  setStep: (step: 'type' | 'username' | 'name') => void
+  setType: (type: Type) => void
+  setStep: (step: Step) => void
 }
 
 const StepType: FC<Props> = (props) => (
@@ -21,7 +22,7 @@ const StepType: FC<Props> = (props) => (
     Use this for OTB games.
     <button
       onClick={() => {
-        props.setType('chesscom')
+        props.setType('chess.com')
         props.setStep('username')
       }}
       className="w-full flex items-center justify-center bg-[#2d2c28] text-gray-700 p-2 rounded"

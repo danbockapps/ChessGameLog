@@ -6,6 +6,9 @@ interface Props {
   setType: (type: Type) => void
   setStep: (step: Step) => void
   type: Type
+  name: string
+  setName: (name: string) => void
+  create: () => void
 }
 
 const StepName: FC<Props> = (props) => (
@@ -24,9 +27,13 @@ const StepName: FC<Props> = (props) => (
       type="text"
       placeholder="Collection name"
       className="w-full p-2 border border-gray-300 rounded"
+      value={props.name}
+      onChange={(e) => props.setName(e.target.value)}
     />
     Optional: Enter a name for your collection.
-    <button className="w-full bg-blue-500 text-white p-2 rounded">Create collection</button>
+    <button onClick={props.create} className="w-full bg-blue-500 text-white p-2 rounded">
+      Create collection
+    </button>
   </>
 )
 
