@@ -4,6 +4,7 @@ import Modal from '../modal'
 import StepName from './stepName'
 import StepType from './stepType'
 import StepUsername from './stepUsername'
+import {createCollection} from './actions'
 
 interface Props {
   isOpen: boolean
@@ -18,7 +19,6 @@ const CreateNewModal: FC<Props> = (props) => {
   const [type, setType] = useState<Type>(null)
   const [username, setUsername] = useState<string>('')
   const [name, setName] = useState<string>('')
-  const supabase = createBrowserClient()
 
   // Reset the step when the modal is closed
   useEffect(() => {
@@ -44,12 +44,8 @@ const CreateNewModal: FC<Props> = (props) => {
           <StepName
             {...{setStep, type, setType, username, setUsername, name, setName}}
             create={async () => {
-              // TODO error handling
-              await supabase.from('collections').insert({
-                name: name.trim() ?? 'Untitled Collection',
-                site: (type && type === 'lichess') || type === 'chess.com' ? type : null,
-              })
               props.setIsOpen(false)
+              createCollection(type, username, name)
             }}
           />
         )}
