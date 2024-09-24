@@ -34,18 +34,21 @@ export type Database = {
           name: string
           owner: string | null
           site: Database['public']['Enums']['site_type'] | null
+          username: string | null
         }
         Insert: {
           id?: string
           name: string
           owner?: string | null
           site?: Database['public']['Enums']['site_type'] | null
+          username?: string | null
         }
         Update: {
           id?: string
           name?: string
           owner?: string | null
           site?: Database['public']['Enums']['site_type'] | null
+          username?: string | null
         }
         Relationships: [
           {

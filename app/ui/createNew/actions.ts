@@ -10,6 +10,7 @@ export async function createCollection(type: Type, username: string, name: strin
   // TODO error handling
   await supabase.from('collections').insert({
     name: name.trim() || 'Untitled collection',
+    username: username.trim() || null,
     site: type === 'lichess' || type === 'chess.com' ? type : null,
   })
 
