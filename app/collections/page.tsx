@@ -6,11 +6,6 @@ import CollectionCard from './collectionCard'
 export default async function PrivatePage() {
   const supabase = createServerClient()
 
-  const {data, error} = await supabase.auth.getUser()
-  if (error || !data?.user) {
-    redirect('/')
-  }
-
   const {data: collections} = await supabase.from('collections').select()
 
   return (

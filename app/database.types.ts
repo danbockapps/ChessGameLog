@@ -31,29 +31,32 @@ export type Database = {
       collections: {
         Row: {
           id: string
+          last_refreshed: string | null
           name: string
-          owner: string | null
+          owner_id: string | null
           site: Database['public']['Enums']['site_type'] | null
           username: string | null
         }
         Insert: {
           id?: string
+          last_refreshed?: string | null
           name: string
-          owner?: string | null
+          owner_id?: string | null
           site?: Database['public']['Enums']['site_type'] | null
           username?: string | null
         }
         Update: {
           id?: string
+          last_refreshed?: string | null
           name?: string
-          owner?: string | null
+          owner_id?: string | null
           site?: Database['public']['Enums']['site_type'] | null
           username?: string | null
         }
         Relationships: [
           {
             foreignKeyName: 'collections_owner_fkey'
-            columns: ['owner']
+            columns: ['owner_id']
             isOneToOne: false
             referencedRelation: 'users'
             referencedColumns: ['id']
@@ -62,30 +65,45 @@ export type Database = {
       }
       games: {
         Row: {
-          collection: string | null
+          collection_id: string | null
           created_at: string
+          eco: string | null
+          fen: string | null
+          game_dttm: string | null
           id: number
-          pgn: string | null
+          opponent: string | null
+          site: Database['public']['Enums']['site_type'] | null
+          time_control: string | null
           url: string | null
         }
         Insert: {
-          collection?: string | null
+          collection_id?: string | null
           created_at?: string
+          eco?: string | null
+          fen?: string | null
+          game_dttm?: string | null
           id?: number
-          pgn?: string | null
+          opponent?: string | null
+          site?: Database['public']['Enums']['site_type'] | null
+          time_control?: string | null
           url?: string | null
         }
         Update: {
-          collection?: string | null
+          collection_id?: string | null
           created_at?: string
+          eco?: string | null
+          fen?: string | null
+          game_dttm?: string | null
           id?: number
-          pgn?: string | null
+          opponent?: string | null
+          site?: Database['public']['Enums']['site_type'] | null
+          time_control?: string | null
           url?: string | null
         }
         Relationships: [
           {
             foreignKeyName: 'games_collection_fkey'
-            columns: ['collection']
+            columns: ['collection_id']
             isOneToOne: false
             referencedRelation: 'collections'
             referencedColumns: ['id']
