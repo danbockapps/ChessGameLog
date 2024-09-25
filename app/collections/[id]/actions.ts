@@ -2,18 +2,20 @@
 
 import {Database} from '@/app/database.types'
 import {createServerClient} from '@/app/lib/supabase/server'
+import {revalidatePath} from 'next/cache'
 
 export const insertChesscomGames = async (collectionId: string) => {
+  console.time('insertChesscomGames')
   const supabase = createServerClient()
 
   const {username, last_refreshed: lastRefreshed} =
     (await supabase.from('collections').select('username,last_refreshed').eq('id', collectionId))
       .data?.[0] ?? {}
 
+  console.timeLog('insertChesscomGames', 'fetched collection')
+
   const lastRefreshedDate = lastRefreshed ? new Date(lastRefreshed) : null
   const currentMonth = new Date().getMonth()
-
-  // current month should have a leading 0 if it's less than 10
   const mm = `${currentMonth < 9 ? '0' : ''}${currentMonth + 1}`
   const yyyy = new Date().getFullYear()
 
@@ -21,6 +23,8 @@ export const insertChesscomGames = async (collectionId: string) => {
     // Just one rest call is needed
     const result = await fetch(`https://api.chess.com/pub/player/${username}/games/${yyyy}/${mm}`)
     const data = (await result.json()) as {games: Game[]}
+
+    console.timeLog('insertChesscomGames', `fetched ${data.games.length} games`)
 
     await supabase.from('games').insert(
       data.games
@@ -40,10 +44,16 @@ export const insertChesscomGames = async (collectionId: string) => {
         })),
     )
 
+    console.timeLog('insertChesscomGames', 'inserted')
+
     await supabase
       .from('collections')
       .update({last_refreshed: new Date().toISOString()})
       .eq('id', collectionId)
+
+    console.timeEnd('insertChesscomGames')
+
+    revalidatePath(`/collections/${collectionId}`)
   }
 }
 

@@ -43,7 +43,7 @@ const CreateNewModal: FC<Props> = (props) => {
         {step === 'name' && (
           <StepName
             {...{setStep, type, setType, username, setUsername, name, setName}}
-            create={async () => {
+            create={() => {
               props.setIsOpen(false)
               createCollection(type, username, name)
             }}
