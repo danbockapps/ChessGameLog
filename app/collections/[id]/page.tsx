@@ -2,6 +2,7 @@ import {createServerClient} from '@/app/lib/supabase/server'
 import Link from 'next/link'
 import Button from '@/app/ui/button'
 import importChesscomGames from './actions/importChesscomGames'
+import importLichessGames from './actions/importLichessGames'
 
 export default async function Collection({params: {id}}: {params: {id: string}}) {
   const supabase = createServerClient()
@@ -20,7 +21,10 @@ export default async function Collection({params: {id}}: {params: {id: string}})
       ?.map((g) => ({
         url: g.url,
         gameDttm: g.game_dttm && new Date(g.game_dttm),
-        opponent: g.opponent,
+        opponent:
+          g.white_username?.toLowerCase() === username?.toLowerCase()
+            ? g.black_username
+            : g.white_username,
         eco: g.eco,
         timeControl: g.time_control,
       }))
@@ -29,6 +33,7 @@ export default async function Collection({params: {id}}: {params: {id: string}})
   const refresh = async () => {
     'use server'
     if (site === 'chess.com' && username) await importChesscomGames(id, lastRefreshed, username)
+    if (site === 'lichess' && username) await importLichessGames(id, lastRefreshed, username)
   }
 
   return (

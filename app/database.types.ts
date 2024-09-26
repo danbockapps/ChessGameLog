@@ -65,40 +65,67 @@ export type Database = {
       }
       games: {
         Row: {
+          black_rating: number | null
+          black_result: string | null
+          black_username: string | null
+          clock_increment: number | null
+          clock_initial: number | null
           collection_id: string | null
           created_at: string
           eco: string | null
           fen: string | null
           game_dttm: string | null
           id: number
-          opponent: string | null
+          lichess_game_id: string | null
           site: Database['public']['Enums']['site_type'] | null
           time_control: string | null
           url: string | null
+          white_rating: number | null
+          white_result: string | null
+          white_username: string | null
+          winner: string | null
         }
         Insert: {
+          black_rating?: number | null
+          black_result?: string | null
+          black_username?: string | null
+          clock_increment?: number | null
+          clock_initial?: number | null
           collection_id?: string | null
           created_at?: string
           eco?: string | null
           fen?: string | null
           game_dttm?: string | null
           id?: number
-          opponent?: string | null
+          lichess_game_id?: string | null
           site?: Database['public']['Enums']['site_type'] | null
           time_control?: string | null
           url?: string | null
+          white_rating?: number | null
+          white_result?: string | null
+          white_username?: string | null
+          winner?: string | null
         }
         Update: {
+          black_rating?: number | null
+          black_result?: string | null
+          black_username?: string | null
+          clock_increment?: number | null
+          clock_initial?: number | null
           collection_id?: string | null
           created_at?: string
           eco?: string | null
           fen?: string | null
           game_dttm?: string | null
           id?: number
-          opponent?: string | null
+          lichess_game_id?: string | null
           site?: Database['public']['Enums']['site_type'] | null
           time_control?: string | null
           url?: string | null
+          white_rating?: number | null
+          white_result?: string | null
+          white_username?: string | null
+          winner?: string | null
         }
         Relationships: [
           {

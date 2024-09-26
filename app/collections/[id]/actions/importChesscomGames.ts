@@ -23,33 +23,44 @@ const importChesscomGames = async (
 
     console.timeLog('insertChesscomGames', `fetched ${data.games.length} games`)
 
-    await supabase.from('games').insert(
-      data.games
-        .filter((g) => new Date(g.end_time * 1000) > lastRefreshed)
-        .map<Database['public']['Tables']['games']['Insert']>((g) => ({
-          collection_id: collectionId,
-          eco: g.eco,
-          fen: g.fen,
-          game_dttm: new Date(g.end_time * 1000).toISOString(),
-          opponent:
-            g.black.username.toLowerCase() === username?.toLowerCase()
-              ? g.white.username
-              : g.black.username,
-          site: 'chess.com',
-          time_control: g.time_control,
-          url: g.url,
-        })),
-    )
+    try {
+      const {error} = await supabase.from('games').insert(
+        data.games
+          .filter((g) => new Date(g.end_time * 1000) > lastRefreshed)
+          .map<Database['public']['Tables']['games']['Insert']>((g) => ({
+            site: 'chess.com',
+            collection_id: collectionId,
+            eco: g.eco,
+            fen: g.fen,
+            game_dttm: new Date(g.end_time * 1000).toISOString(),
+            time_control: g.time_control,
+            url: g.url,
+            white_username: g.white.username,
+            black_username: g.black.username,
+            white_rating: g.white.rating,
+            black_rating: g.black.rating,
+            white_result: g.white.result,
+            black_result: g.black.result,
+          })),
+      )
 
-    console.timeLog('insertChesscomGames', 'inserted')
+      console.timeLog('insertChesscomGames', 'inserted')
 
-    await supabase
-      .from('collections')
-      .update({last_refreshed: new Date().toISOString()})
-      .eq('id', collectionId)
+      if (error) {
+        console.log('Error inserting games for Chess.com')
+        console.error(error)
+      } else {
+        await supabase
+          .from('collections')
+          .update({last_refreshed: new Date().toISOString()})
+          .eq('id', collectionId)
+      }
+    } catch (e) {
+      console.log('Caught error inserting games for Chess.com')
+      console.error(e)
+    }
 
     console.timeEnd('insertChesscomGames')
-
     revalidatePath(`/collections/${collectionId}`)
   }
 }
