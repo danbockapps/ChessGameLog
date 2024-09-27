@@ -6,17 +6,20 @@ import Card from './card'
 
 interface Props {
   header: ReactNode
+  cardClassName?: string
+  headerClassName?: string
+  contentClassName?: string
 }
 
 const Accordion: FC<PropsWithChildren<Props>> = (props) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <Card onClick={() => setIsOpen(!isOpen)} className="m-2 p-4">
-      <div>{props.header}</div>
+    <Card onClick={() => setIsOpen(!isOpen)} className={props.cardClassName}>
+      <div className={props.headerClassName}>{props.header}</div>
 
       <div className={`accordion-wrapper ${isOpen ? 'is-open' : ''}`}>
-        <div className="accordion-inner">{props.children}</div>
+        <div className={`accordion-inner ${props.contentClassName ?? ''}`}>{props.children}</div>
       </div>
     </Card>
   )

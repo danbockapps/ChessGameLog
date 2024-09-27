@@ -106,11 +106,23 @@ const importChesscomGamesForMonth = async ({
 
 interface Player {
   rating: number
-  result: string
+  result: Result
   '@id': string
   username: string
   uuid: string
 }
+
+export type Result =
+  | 'repetition'
+  | 'abandoned'
+  | 'checkmated'
+  | 'stalemate'
+  | 'insufficient'
+  | 'agreed'
+  | 'timeout'
+  | 'timevsinsufficient'
+  | 'win'
+  | 'resigned'
 
 interface Game {
   url: string
