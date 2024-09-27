@@ -1,4 +1,5 @@
 import {createServerClient} from '@/app/lib/supabase/server'
+import Accordion from '@/app/ui/accordion'
 import Link from 'next/link'
 import RefreshButton from './RefreshButton'
 
@@ -38,9 +39,9 @@ export default async function Collection({params: {id}}: {params: {id: string}})
         {games.map(
           (g, i) =>
             g.gameDttm && (
-              <div key={i}>
+              <Accordion key={i} header={g.opponent}>
                 {g.gameDttm.toLocaleString()} {g.opponent}
-              </div>
+              </Accordion>
             ),
         )}
       </div>
