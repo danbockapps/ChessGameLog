@@ -9,7 +9,8 @@ const importChesscomGames = async (
   lastRefreshed: Date | null,
   username: string,
 ) => {
-  console.time('insertChesscomGames')
+  console.log('importChesscomGames')
+  console.time('importChesscomGames')
 
   const currentDate = new Date()
 
@@ -36,7 +37,7 @@ const importChesscomGames = async (
     })
   }
 
-  console.timeEnd('insertChesscomGames')
+  console.timeEnd('importChesscomGames')
   revalidatePath(`/collections/${collectionId}`)
 }
 
@@ -57,15 +58,15 @@ const importChesscomGamesForMonth = async ({
 }: ImportChesscomGamesForMonthProps) => {
   const supabase = createServerClient()
   const mm = `${jsMonth < 9 ? '0' : ''}${jsMonth + 1}`
-  console.timeLog('insertChesscomGames', `fetching games for ${year}-${mm}`)
+  console.timeLog('importChesscomGames', `fetching games for ${year}-${mm}`)
   const result = await fetch(`https://api.chess.com/pub/player/${username}/games/${year}/${mm}`)
   const data = (await result.json()) as {games: Game[]}
-  console.timeLog('insertChesscomGames', `fetched ${data.games.length} games`)
+  console.timeLog('importChesscomGames', `fetched ${data.games.length} games`)
 
   try {
     const {error} = await supabase.from('games').upsert(
       data.games
-        .filter((g) => new Date(g.end_time * 1000) > lastRefreshed)
+        .filter((g) => !lastRefreshed || new Date(g.end_time * 1000) > lastRefreshed)
         .map<Database['public']['Tables']['games']['Insert']>((g) => ({
           site: 'chess.com',
           collection_id: collectionId,
@@ -84,7 +85,7 @@ const importChesscomGamesForMonth = async ({
       {onConflict: 'url', ignoreDuplicates: true}, // skip insert if id exists
     )
 
-    console.timeLog('insertChesscomGames', 'attempted to insert')
+    console.timeLog('importChesscomGames', 'attempted to insert')
 
     if (error) {
       console.log('Error inserting games for Chess.com')

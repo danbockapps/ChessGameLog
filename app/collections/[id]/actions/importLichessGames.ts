@@ -1,3 +1,5 @@
+'use server'
+
 import {Database} from '@/app/database.types'
 import {createServerClient} from '@/app/lib/supabase/server'
 import {revalidatePath} from 'next/cache'
@@ -7,6 +9,7 @@ const importLichessGames = async (
   lastRefreshed: Date | null,
   username: string,
 ) => {
+  console.log('importLichessGames')
   console.time('importLichessGames')
   const supabase = createServerClient()
 

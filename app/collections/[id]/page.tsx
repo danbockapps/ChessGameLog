@@ -1,8 +1,6 @@
 import {createServerClient} from '@/app/lib/supabase/server'
 import Link from 'next/link'
-import Button from '@/app/ui/button'
-import importChesscomGames from './actions/importChesscomGames'
-import importLichessGames from './actions/importLichessGames'
+import RefreshButton from './RefreshButton'
 
 export default async function Collection({params: {id}}: {params: {id: string}}) {
   const supabase = createServerClient()
@@ -30,22 +28,12 @@ export default async function Collection({params: {id}}: {params: {id: string}})
       }))
       .sort((a, b) => (a.gameDttm && b.gameDttm ? (b.gameDttm > a.gameDttm ? 1 : -1) : 0)) ?? []
 
-  const refresh = async () => {
-    'use server'
-    if (site === 'chess.com' && username) await importChesscomGames(id, lastRefreshed, username)
-    if (site === 'lichess' && username) await importLichessGames(id, lastRefreshed, username)
-  }
-
   return (
     <div className="p-4">
       <Link href="/collections">⬅️ Collections</Link>
       <h1>{name ?? ''}</h1>
       Last refreshed: {lastRefreshed?.toLocaleString() ?? 'Never'}
-      {site && (
-        <form>
-          <Button formAction={refresh}>Refresh</Button>
-        </form>
-      )}
+      {site && username && <RefreshButton collectionId={id} {...{site, username, lastRefreshed}} />}
       <div>
         {games.map(
           (g, i) =>
