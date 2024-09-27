@@ -1,0 +1,15 @@
+/* https://keithjgrant.com/posts/2023/04/transitioning-to-height-auto/ */
+
+.accordion-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.1s;
+}
+
+.accordion-wrapper.is-open {
+  grid-template-rows: 1fr;
+}
+
+.accordion-inner {
+  overflow: hidden;
+}
