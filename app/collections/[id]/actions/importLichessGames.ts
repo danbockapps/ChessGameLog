@@ -33,7 +33,7 @@ const importLichessGames = async (
 
   if (data.length > 0) {
     try {
-      const {error} = await supabase.from('games').insert(
+      const {error} = await supabase.from('games').upsert(
         data.map<Database['public']['Tables']['games']['Insert']>((g) => ({
           site: 'lichess',
           collection_id: collectionId,
@@ -49,6 +49,7 @@ const importLichessGames = async (
           black_rating: g.players.black.rating,
           winner: g.winner,
         })),
+        {onConflict: 'lichess_game_id', ignoreDuplicates: true}, // skip insert if id exists
       )
 
       console.timeLog('importLichessGames', 'inserted')

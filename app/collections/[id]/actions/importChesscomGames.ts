@@ -24,7 +24,7 @@ const importChesscomGames = async (
     console.timeLog('insertChesscomGames', `fetched ${data.games.length} games`)
 
     try {
-      const {error} = await supabase.from('games').insert(
+      const {error} = await supabase.from('games').upsert(
         data.games
           .filter((g) => new Date(g.end_time * 1000) > lastRefreshed)
           .map<Database['public']['Tables']['games']['Insert']>((g) => ({
@@ -42,6 +42,7 @@ const importChesscomGames = async (
             white_result: g.white.result,
             black_result: g.black.result,
           })),
+        {onConflict: 'url', ignoreDuplicates: true}, // skip insert if id exists
       )
 
       console.timeLog('insertChesscomGames', 'inserted')
