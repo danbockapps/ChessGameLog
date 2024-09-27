@@ -22,7 +22,7 @@ const importLichessGames = async (
     headers: {accept: 'application/x-ndjson', Authorization: 'Bearer ' + process.env.LICHESS_TOKEN},
   })
 
-  console.log('HTTP status', qr.status, qr.statusText)
+  console.timeLog('importLichessGames', 'HTTP status', qr.status, qr.statusText)
   const text = await qr.text()
   console.timeLog('importLichessGames', `fetched ${text.length} bytes`)
 
