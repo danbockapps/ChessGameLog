@@ -16,7 +16,7 @@ const Accordion: FC<PropsWithChildren<Props>> = (props) => {
 
   return (
     <Card onClick={() => setIsOpen(!isOpen)} className={props.cardClassName}>
-      <div className={props.headerClassName}>{props.header}</div>
+      <div className={`cursor-pointer ${props.headerClassName ?? ''}`}>{props.header}</div>
 
       <div className={`accordion-wrapper ${isOpen ? 'is-open' : ''}`}>
         <div className={`accordion-inner ${props.contentClassName ?? ''}`}>{props.children}</div>

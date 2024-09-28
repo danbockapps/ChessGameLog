@@ -15,7 +15,7 @@ export default async function Layout({children}: Readonly<{children: React.React
         <MainMenu {...{user}} />
       </div>
 
-      <div className="min-h-screen bg-gradient-to-r from-yellow-50 to-gray-100">{children}</div>
+      <div className="min-h-screen bg-gradient-to-br from-yellow-50 to-gray-100">{children}</div>
     </>
   ) : (
     <>Please log in to continue.</>
