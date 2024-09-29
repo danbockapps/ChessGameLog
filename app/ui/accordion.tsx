@@ -14,19 +14,24 @@ interface Props {
 
 const Accordion: FC<PropsWithChildren<Props>> = (props) => {
   const [isOpen, setIsOpen] = useState(false)
+  const contentClassName = props.contentClassName ?? ''
 
   return (
-    <Card
-      onClick={() => {
-        if (props.onExpand && !isOpen) props.onExpand()
-        setIsOpen(!isOpen)
-      }}
-      className={props.cardClassName}
-    >
-      <div className={`cursor-pointer ${props.headerClassName ?? ''}`}>{props.header}</div>
+    <Card className={props.cardClassName}>
+      <div
+        onClick={() => {
+          if (props.onExpand && !isOpen) props.onExpand()
+          setIsOpen(!isOpen)
+        }}
+        className={`cursor-pointer ${props.headerClassName ?? ''}`}
+      >
+        {props.header}
+      </div>
 
       <div className={`accordion-wrapper ${isOpen ? 'is-open' : ''}`}>
-        <div className={`accordion-inner ${props.contentClassName ?? ''}`}>{props.children}</div>
+        <div className={`accordion-inner ${isOpen && contentClassName}`}>
+          {isOpen && props.children}
+        </div>
       </div>
     </Card>
   )
