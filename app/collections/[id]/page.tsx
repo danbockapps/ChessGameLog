@@ -1,7 +1,7 @@
 import {createServerClient} from '@/app/lib/supabase/server'
 import Accordion from '@/app/ui/accordion'
 import Link from 'next/link'
-import {Result} from './actions/importChesscomGames'
+import {ChesscomResult} from './actions/importChesscomGames'
 import GameAccordion from './gameAccordion'
 import RefreshButton from './refreshButton'
 
@@ -26,8 +26,8 @@ export default async function Collection({params: {id}}: {params: {id: string}})
         gameDttm: g.game_dttm && new Date(g.game_dttm),
         whiteUsername: g.white_username,
         blackUsername: g.black_username,
-        whiteResult: g.white_result as Result,
-        blackResult: g.black_result as Result,
+        whiteResult: g.white_result as ChesscomResult,
+        blackResult: g.black_result as ChesscomResult,
         eco: g.eco,
         timeControl: g.time_control,
       }))

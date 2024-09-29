@@ -106,13 +106,13 @@ const importChesscomGamesForMonth = async ({
 
 interface Player {
   rating: number
-  result: Result
+  result: ChesscomResult
   '@id': string
   username: string
   uuid: string
 }
 
-export type Result =
+export type ChesscomResult =
   | 'repetition'
   | 'abandoned'
   | 'checkmated'

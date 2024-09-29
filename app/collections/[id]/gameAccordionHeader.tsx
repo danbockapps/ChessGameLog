@@ -1,0 +1,46 @@
+import {FC} from 'react'
+
+interface Props {
+  whiteUsername: string
+  blackUsername: string
+  timeControl: string
+  opening: string
+  gameDttm: Date
+  points: 0 | 0.5 | 1
+}
+
+const GameAccordionHeader: FC<Props> = (props) => (
+  <>
+    <div className={`h-2 w-2 rounded ${getDotColor(props.points)}`} />
+    {props.whiteUsername} vs. {props.blackUsername}
+    <div className="text-gray-500">{props.timeControl}</div>
+    <div className="hidden md:block ml-auto truncate max-w-sm text-gray-500">{props.opening}</div>
+    <div className="ml-auto md:ml-0 text-gray-500">{getRelativeTime(props.gameDttm)}</div>
+  </>
+)
+
+const getRelativeTime = (date: Date) => {
+  const diff = Date.now() - date.getTime()
+  const seconds = Math.floor(diff / 1000)
+  const minutes = Math.floor(seconds / 60)
+  const hours = Math.floor(minutes / 60)
+  const days = Math.floor(hours / 24)
+
+  if (days > 0) return `${days}d ago`
+  if (hours > 0) return `${hours}h ago`
+  if (minutes > 0) return `${minutes}m ago`
+  return `${seconds}s ago`
+}
+
+const getDotColor = (points: 0 | 0.5 | 1) => {
+  switch (points) {
+    case 1:
+      return 'bg-green-500'
+    case 0.5:
+      return 'bg-gray-500'
+    case 0:
+      return 'bg-red-500'
+  }
+}
+
+export default GameAccordionHeader

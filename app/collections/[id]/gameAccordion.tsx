@@ -1,14 +1,15 @@
 import Accordion from '@/app/ui/accordion'
 import {FC} from 'react'
-import {Result} from './actions/importChesscomGames'
+import {ChesscomResult} from './actions/importChesscomGames'
+import GameAccordionHeader from './gameAccordionHeader'
 
 interface Props {
   id: number
   username: string // Our user's username
   whiteUsername: string
   blackUsername: string
-  whiteResult: Result
-  blackResult: Result
+  whiteResult: ChesscomResult
+  blackResult: ChesscomResult
   gameDttm: Date
   eco: string
   timeControl: string
@@ -24,15 +25,14 @@ const GameAccordion: FC<Props> = (props) => {
       : props.blackResult
 
   const header = (
-    <>
-      <div className={`h-2 w-2 rounded ${getDotColor(ourResult)}`} />
-      {props.whiteUsername} vs. {props.blackUsername}
-      <div className="text-gray-500">{getReadableTimeControl(props.timeControl)}</div>
-      <div className="hidden md:block ml-auto truncate max-w-sm text-gray-500">
-        {getReadableEco(props.eco)}
-      </div>
-      <div className="ml-auto md:ml-0 text-gray-500">{getRelativeTime(props.gameDttm)}</div>
-    </>
+    <GameAccordionHeader
+      whiteUsername={props.whiteUsername}
+      blackUsername={props.blackUsername}
+      timeControl={getReadableTimeControl(props.timeControl)}
+      opening={getReadableEco(props.eco)}
+      gameDttm={props.gameDttm}
+      points={getPoints(ourResult)}
+    />
   )
 
   return (
@@ -46,20 +46,7 @@ const GameAccordion: FC<Props> = (props) => {
   )
 }
 
-const getDotColor = (result: Result) => {
-  const points = getPoints(result)
-
-  switch (points) {
-    case 1:
-      return 'bg-green-500'
-    case 0.5:
-      return 'bg-gray-500'
-    case 0:
-      return 'bg-red-500'
-  }
-}
-
-const getPoints = (result: Result): 0 | 0.5 | 1 => {
+const getPoints = (result: ChesscomResult): 0 | 0.5 | 1 => {
   switch (result) {
     case 'win':
       return 1
@@ -77,19 +64,6 @@ const getPoints = (result: Result): 0 | 0.5 | 1 => {
     case 'resigned':
       return 0
   }
-}
-
-const getRelativeTime = (date: Date) => {
-  const diff = Date.now() - date.getTime()
-  const seconds = Math.floor(diff / 1000)
-  const minutes = Math.floor(seconds / 60)
-  const hours = Math.floor(minutes / 60)
-  const days = Math.floor(hours / 24)
-
-  if (days > 0) return `${days}d ago`
-  if (hours > 0) return `${hours}h ago`
-  if (minutes > 0) return `${minutes}m ago`
-  return `${seconds}s ago`
 }
 
 const getReadableEco = (eco: string) => {
