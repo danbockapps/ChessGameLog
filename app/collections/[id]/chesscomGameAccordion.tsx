@@ -1,7 +1,10 @@
+'use client'
+
 import Accordion from '@/app/ui/accordion'
 import {FC} from 'react'
 import {ChesscomResult} from './actions/importChesscomGames'
 import GameAccordionHeader from './gameAccordionHeader'
+import getSingleChesscomGame from './actions/getSingleChesscomGame'
 
 interface Props {
   id: number
@@ -18,7 +21,7 @@ interface Props {
 
 // chesscom only
 
-const GameAccordion: FC<Props> = (props) => {
+const ChesscomGameAccordion: FC<Props> = (props) => {
   const ourResult =
     props.whiteUsername.toLowerCase() === props.username.toLowerCase()
       ? props.whiteResult
@@ -40,6 +43,10 @@ const GameAccordion: FC<Props> = (props) => {
       cardClassName="mb-4"
       {...{header}}
       headerClassName="px-4 py-4 flex items-center gap-4 whitespace-nowrap"
+      onExpand={async () => {
+        const res = await getSingleChesscomGame(props.url)
+        console.log(res)
+      }}
     >
       board goes here
     </Accordion>
@@ -78,4 +85,4 @@ const getReadableTimeControl = (timeControl: string) => {
   return `${seconds / 60} ${increment ?? 0}`
 }
 
-export default GameAccordion
+export default ChesscomGameAccordion

@@ -2,7 +2,7 @@ import {createServerClient} from '@/app/lib/supabase/server'
 import Accordion from '@/app/ui/accordion'
 import Link from 'next/link'
 import {ChesscomResult} from './actions/importChesscomGames'
-import GameAccordion from './gameAccordion'
+import ChesscomGameAccordion from './chesscomGameAccordion'
 import RefreshButton from './refreshButton'
 
 export default async function Collection({params: {id}}: {params: {id: string}}) {
@@ -44,7 +44,7 @@ export default async function Collection({params: {id}}: {params: {id: string}})
           (g) =>
             g.gameDttm &&
             (site === 'chess.com' ? (
-              <GameAccordion
+              <ChesscomGameAccordion
                 key={g.url ?? g.lichessGameId}
                 id={g.id}
                 username={username!}

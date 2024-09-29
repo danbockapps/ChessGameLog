@@ -9,13 +9,20 @@ interface Props {
   cardClassName?: string
   headerClassName?: string
   contentClassName?: string
+  onExpand?: () => void
 }
 
 const Accordion: FC<PropsWithChildren<Props>> = (props) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <Card onClick={() => setIsOpen(!isOpen)} className={props.cardClassName}>
+    <Card
+      onClick={() => {
+        if (props.onExpand && !isOpen) props.onExpand()
+        setIsOpen(!isOpen)
+      }}
+      className={props.cardClassName}
+    >
       <div className={`cursor-pointer ${props.headerClassName ?? ''}`}>{props.header}</div>
 
       <div className={`accordion-wrapper ${isOpen ? 'is-open' : ''}`}>
