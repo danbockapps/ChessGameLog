@@ -2,7 +2,7 @@ import {createServerClient} from '@/app/lib/supabase/server'
 import Accordion from '@/app/ui/accordion'
 import Link from 'next/link'
 import {ChesscomResult} from './actions/importChesscomGames'
-import ChesscomGameAccordion from './chesscomGameAccordion'
+import ChesscomGameAccordion from './chesscom/gameAccordion'
 import RefreshButton from './refreshButton'
 
 export default async function Collection({params: {id}}: {params: {id: string}}) {

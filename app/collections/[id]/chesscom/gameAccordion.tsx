@@ -4,9 +4,9 @@ import Accordion from '@/app/ui/accordion'
 import {Chess} from 'chess.js'
 import {FC, useRef, useState} from 'react'
 import {Chessboard} from 'react-chessboard'
-import getSingleChesscomGame, {ChessJsMoveParam} from './actions/getSingleChesscomGame'
-import {ChesscomResult} from './actions/importChesscomGames'
-import GameAccordionHeader from './gameAccordionHeader'
+import getSingleChesscomGame, {ChessJsMoveParam} from '../actions/getSingleChesscomGame'
+import {ChesscomResult} from '../actions/importChesscomGames'
+import GameAccordionHeader from '../gameAccordionHeader'
 
 interface Props {
   id: number
