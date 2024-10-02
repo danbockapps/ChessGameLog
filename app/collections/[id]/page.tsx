@@ -31,6 +31,7 @@ export default async function Collection({params: {id}}: {params: {id: string}})
         eco: g.eco,
         timeControl: g.time_control,
         fen: g.fen,
+        notes: g.notes,
       }))
       .sort((a, b) => (a.gameDttm && b.gameDttm ? (b.gameDttm > a.gameDttm ? 1 : -1) : 0))
       .filter((_g, i) => i < 5) ?? []
@@ -59,6 +60,7 @@ export default async function Collection({params: {id}}: {params: {id: string}})
                 timeControl={g.timeControl!}
                 url={g.url!}
                 fen={g.fen!}
+                notes={g.notes}
               />
             ) : (
               <Accordion

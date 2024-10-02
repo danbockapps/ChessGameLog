@@ -77,6 +77,7 @@ export type Database = {
           game_dttm: string | null
           id: number
           lichess_game_id: string | null
+          notes: string | null
           site: Database['public']['Enums']['site_type'] | null
           time_control: string | null
           url: string | null
@@ -98,6 +99,7 @@ export type Database = {
           game_dttm?: string | null
           id?: number
           lichess_game_id?: string | null
+          notes?: string | null
           site?: Database['public']['Enums']['site_type'] | null
           time_control?: string | null
           url?: string | null
@@ -119,6 +121,7 @@ export type Database = {
           game_dttm?: string | null
           id?: number
           lichess_game_id?: string | null
+          notes?: string | null
           site?: Database['public']['Enums']['site_type'] | null
           time_control?: string | null
           url?: string | null
