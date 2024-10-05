@@ -1,5 +1,6 @@
 import {FC} from 'react'
 import Back from '../back'
+import Button from '../button'
 import {Step, Type} from './createNewModal'
 
 interface Props {
@@ -25,13 +26,15 @@ const StepUsername: FC<Props> = (props) => (
       value={props.username}
       onChange={(e) => props.setUsername(e.target.value)}
     />
-    Enter your username on {props.type === 'chesscom' ? 'Chess.com' : 'Lichess'}.
-    <button
+    Enter your username on {props.type === 'chess.com' ? 'Chess.com' : 'Lichess'}.
+    <Button
       onClick={() => props.setStep('name')}
-      className="w-full bg-blue-500 text-white p-2 rounded"
+      variant="filled"
+      fullWidth
+      disabled={!props.username}
     >
       Next
-    </button>
+    </Button>
   </>
 )
 
