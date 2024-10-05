@@ -1,5 +1,5 @@
 import {createBrowserClient} from '@/app/lib/supabase/client'
-import SectionHeader from '@/app/ui/SectionHeader'
+import SectionHeader, {captionClassNames} from '@/app/ui/SectionHeader'
 import {FC, useState} from 'react'
 import {MultiValue} from 'react-select'
 import CreatableSelect from 'react-select/creatable'
@@ -13,8 +13,9 @@ interface Props {
 export type Tag = {id: number; name: string | null}
 
 const Tags: FC<Props> = (props) => {
-  const [loading, setLoading] = useState(false)
   const [values, setValues] = useState<MultiValue<Tag> | null>()
+  const [loading, setLoading] = useState(false)
+  const [beenSaved, setBeenSaved] = useState(false)
   const supabase = createBrowserClient()
 
   const selectedOptions =
@@ -28,7 +29,6 @@ const Tags: FC<Props> = (props) => {
   return (
     <div>
       <SectionHeader title="Takeaways" description="Select tags or create your own" />
-
       <CreatableSelect
         isMulti
         isDisabled={loading}
@@ -54,18 +54,24 @@ const Tags: FC<Props> = (props) => {
           }
 
           setValues(newValue)
+          setBeenSaved(true)
           setLoading(false)
         }}
         onCreateOption={async (inputValue) => {
           setLoading(true)
           const {data} = await supabase.from('tags').insert({name: inputValue}).select('id')
           if (data && data.length !== 0) await insertGameTag(data[0]?.id, props.gameId)
+          setBeenSaved(true)
           setLoading(false)
         }}
         options={props.options}
         getOptionValue={({id}) => `${id}`}
         getOptionLabel={({name}) => name ?? ''}
       />
+
+      <div className={`${captionClassNames} mt-5`}>
+        {loading ? 'Saving...' : beenSaved ? '✓ Takeaways saved' : ''}
+      </div>
     </div>
   )
 }
