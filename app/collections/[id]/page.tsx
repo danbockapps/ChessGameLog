@@ -1,4 +1,5 @@
 import {createServerClient} from '@/app/lib/supabase/server'
+import {captionClassNames} from '@/app/ui/SectionHeader'
 import Link from 'next/link'
 import {ChesscomResult} from './actions/importChesscomGames'
 import ChesscomGameAccordion from './chesscom/gameAccordion'
@@ -50,10 +51,20 @@ export default async function Collection({params: {id}}: {params: {id: string}})
 
   return (
     <div className="p-4">
-      <Link href="/collections">⬅️ Collections</Link>
-      <h1>{name ?? ''}</h1>
-      Last refreshed: {lastRefreshed?.toLocaleString() ?? 'Never'}
-      {site && username && <RefreshButton collectionId={id} {...{site, username, lastRefreshed}} />}
+      <Link href="/collections">⬅ Collections</Link>
+
+      <div className="py-6 flex justify-between items-center">
+        <h1 className="text-xl">{name ?? ''}</h1>
+
+        <p className={`${captionClassNames} ml-auto mr-4`}>
+          Last refreshed: {lastRefreshed?.toLocaleString() ?? 'Never'}
+        </p>
+
+        {site && username && (
+          <RefreshButton collectionId={id} {...{site, username, lastRefreshed}} />
+        )}
+      </div>
+
       <div>
         {games.map(
           (g) =>
