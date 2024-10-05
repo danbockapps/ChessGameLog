@@ -1,8 +1,8 @@
 import {createServerClient} from '@/app/lib/supabase/server'
-import Accordion from '@/app/ui/accordion'
 import Link from 'next/link'
 import {ChesscomResult} from './actions/importChesscomGames'
 import ChesscomGameAccordion from './chesscom/gameAccordion'
+import LichessGameAccordion from './lichess/gameAccordion'
 import RefreshButton from './refreshButton'
 import {Tag} from './tags'
 
@@ -23,6 +23,9 @@ export default async function Collection({params: {id}}: {params: {id: string}})
   const lastRefreshed = last_refreshed ? new Date(last_refreshed) : null
   const options: Tag[] = tagsResult.data?.map((t) => ({id: t.id, name: t.name})) ?? []
 
+  const getTags = (id: number) =>
+    tagsResult.data?.filter((t) => t.games.some((ga) => ga.id === id)).map((t) => t.id) ?? []
+
   const games =
     gamesResult.data
       ?.map((g) => ({
@@ -34,8 +37,11 @@ export default async function Collection({params: {id}}: {params: {id: string}})
         blackUsername: g.black_username,
         whiteResult: g.white_result as ChesscomResult,
         blackResult: g.black_result as ChesscomResult,
+        winner: g.winner,
         eco: g.eco,
         timeControl: g.time_control,
+        clockInitial: g.clock_initial,
+        clockIncrement: g.clock_increment,
         fen: g.fen,
         notes: g.notes,
       }))
@@ -68,19 +74,26 @@ export default async function Collection({params: {id}}: {params: {id: string}})
                 fen={g.fen!}
                 notes={g.notes}
                 {...{options}}
-                tags={
-                  tagsResult.data
-                    ?.filter((t) => t.games.some((ga) => ga.id === g.id))
-                    .map((t) => t.id) ?? []
-                }
+                tags={getTags(g.id)}
               />
             ) : (
-              <Accordion
-                key={g.url ?? g.lichessGameId}
-                header={`${g.whiteUsername} vs. ${g.blackUsername}`}
-              >
-                {g.gameDttm.toLocaleString()}
-              </Accordion>
+              <LichessGameAccordion
+                key={g.lichessGameId}
+                id={g.id}
+                username={username!}
+                whiteUsername={g.whiteUsername!} // TODO
+                blackUsername={g.blackUsername!}
+                winner={g.winner as 'white' | 'black' | 'draw'}
+                gameDttm={g.gameDttm}
+                eco={g.eco!}
+                clockInitial={g.clockInitial!}
+                clockIncrement={g.clockIncrement!}
+                lichessGameId={g.lichessGameId!}
+                fen={g.fen!}
+                notes={g.notes}
+                {...{options}}
+                tags={getTags(g.id)}
+              />
             )),
         )}
       </div>

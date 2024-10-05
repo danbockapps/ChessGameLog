@@ -7,6 +7,7 @@ import GameAccordionHeader from '../gameAccordionHeader'
 import Notes from '../notes'
 import Tags, {Tag} from '../tags'
 import Board from './board'
+import {gameAccordionClassNames} from '@/app/ui/accordionClassNames'
 
 interface Props {
   id: number
@@ -24,6 +25,8 @@ interface Props {
   options: Tag[]
   tags: number[]
 }
+
+const {cardClassName, headerClassName, contentClassName} = gameAccordionClassNames
 
 const ChesscomGameAccordion: FC<Props> = (props) => {
   const ourResult =
@@ -43,24 +46,16 @@ const ChesscomGameAccordion: FC<Props> = (props) => {
   )
 
   return (
-    <Accordion
-      cardClassName="mb-4"
-      {...{header}}
-      headerClassName="px-4 py-4 flex items-center gap-4 whitespace-nowrap"
-      contentClassName="p-4"
-    >
-      <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
-        <Board
-          whiteUsername={props.whiteUsername}
-          username={props.username}
-          url={props.url}
-          fen={props.fen}
-        />
+    <Accordion {...{header, cardClassName, headerClassName, contentClassName}}>
+      <Board
+        whiteUsername={props.whiteUsername}
+        username={props.username}
+        url={props.url}
+        fen={props.fen}
+      />
 
-        <Tags options={props.options} tags={props.tags} gameId={props.id} />
-
-        <Notes gameId={props.id} savedNotes={props.notes} />
-      </div>
+      <Tags options={props.options} tags={props.tags} gameId={props.id} />
+      <Notes gameId={props.id} savedNotes={props.notes} />
     </Accordion>
   )
 }
