@@ -18,7 +18,7 @@ const Notes: FC<Props> = (props) => {
       />
 
       <Button className="self-end" onClick={props.save}>
-        Save
+        Save notes
       </Button>
     </div>
   )

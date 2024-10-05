@@ -63,6 +63,39 @@ export type Database = {
           },
         ]
       }
+      game_tag: {
+        Row: {
+          created_at: string
+          game_id: number
+          tag_id: number
+        }
+        Insert: {
+          created_at?: string
+          game_id: number
+          tag_id: number
+        }
+        Update: {
+          created_at?: string
+          game_id?: number
+          tag_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'game_tag_game_id_fkey'
+            columns: ['game_id']
+            isOneToOne: false
+            referencedRelation: 'games'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'game_tag_tag_id_fkey'
+            columns: ['tag_id']
+            isOneToOne: false
+            referencedRelation: 'tags'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       games: {
         Row: {
           black_rating: number | null
@@ -161,6 +194,41 @@ export type Database = {
             foreignKeyName: 'profiles_id_fkey'
             columns: ['id']
             isOneToOne: true
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      tags: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: number
+          name: string | null
+          owner_id: string | null
+          public: boolean | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: number
+          name?: string | null
+          owner_id?: string | null
+          public?: boolean | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: number
+          name?: string | null
+          owner_id?: string | null
+          public?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'tags_owner_fkey'
+            columns: ['owner_id']
+            isOneToOne: false
             referencedRelation: 'users'
             referencedColumns: ['id']
           },

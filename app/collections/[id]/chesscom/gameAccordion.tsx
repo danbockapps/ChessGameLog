@@ -6,6 +6,7 @@ import {FC, useState} from 'react'
 import {ChesscomResult} from '../actions/importChesscomGames'
 import GameAccordionHeader from '../gameAccordionHeader'
 import Notes from '../notes'
+import Tags, {Tag} from '../tags'
 import Board from './board'
 
 interface Props {
@@ -21,6 +22,8 @@ interface Props {
   url: string
   fen: string
   notes: string | null
+  options: Tag[]
+  tags: number[]
 }
 
 const ChesscomGameAccordion: FC<Props> = (props) => {
@@ -64,7 +67,7 @@ const ChesscomGameAccordion: FC<Props> = (props) => {
           fen={props.fen}
         />
 
-        <div className="bg-gray-500">Game ID: {props.id}</div>
+        <Tags options={props.options} tags={props.tags} gameId={props.id} />
 
         <Notes gameId={props.id} {...{notes, setNotes, save}} />
       </div>

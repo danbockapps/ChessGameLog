@@ -4,18 +4,24 @@ import Link from 'next/link'
 import {ChesscomResult} from './actions/importChesscomGames'
 import ChesscomGameAccordion from './chesscom/gameAccordion'
 import RefreshButton from './refreshButton'
+import {Tag} from './tags'
 
 export default async function Collection({params: {id}}: {params: {id: string}}) {
   const supabase = createServerClient()
-  // TODO auth check
+  const user = await supabase.auth.getUser()
 
-  const [collectionsResult, gamesResult] = await Promise.all([
-    supabase.from('collections').select('name,username,site,last_refreshed').eq('id', id),
+  const [collectionsResult, gamesResult, tagsResult] = await Promise.all([
+    supabase.from('collections').select('name,username,site,last_refreshed').eq('id', id).single(),
     supabase.from('games').select().eq('collection_id', id),
+    supabase
+      .from('tags')
+      .select('id, name, games ( id )')
+      .or(`owner_id.eq.${user.data.user?.id}, public.eq.1`),
   ])
 
-  const {name, username, site, last_refreshed} = collectionsResult.data?.[0] ?? {}
+  const {name, username, site, last_refreshed} = collectionsResult.data ?? {}
   const lastRefreshed = last_refreshed ? new Date(last_refreshed) : null
+  const options: Tag[] = tagsResult.data?.map((t) => ({id: t.id, name: t.name})) ?? []
 
   const games =
     gamesResult.data
@@ -34,7 +40,7 @@ export default async function Collection({params: {id}}: {params: {id: string}})
         notes: g.notes,
       }))
       .sort((a, b) => (a.gameDttm && b.gameDttm ? (b.gameDttm > a.gameDttm ? 1 : -1) : 0))
-      .filter((_g, i) => i < 5) ?? []
+      .filter((_g, i) => i < 5) ?? [] // TODO paging
 
   return (
     <div className="p-4">
@@ -61,6 +67,12 @@ export default async function Collection({params: {id}}: {params: {id: string}})
                 url={g.url!}
                 fen={g.fen!}
                 notes={g.notes}
+                {...{options}}
+                tags={
+                  tagsResult.data
+                    ?.filter((t) => t.games.some((ga) => ga.id === g.id))
+                    .map((t) => t.id) ?? []
+                }
               />
             ) : (
               <Accordion
