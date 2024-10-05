@@ -1,8 +1,7 @@
 'use client'
 
-import {createBrowserClient} from '@/app/lib/supabase/client'
 import Accordion from '@/app/ui/accordion'
-import {FC, useState} from 'react'
+import {FC} from 'react'
 import {ChesscomResult} from '../actions/importChesscomGames'
 import GameAccordionHeader from '../gameAccordionHeader'
 import Notes from '../notes'
@@ -27,8 +26,6 @@ interface Props {
 }
 
 const ChesscomGameAccordion: FC<Props> = (props) => {
-  const [notes, setNotes] = useState(props.notes ?? '')
-
   const ourResult =
     props.whiteUsername.toLowerCase() === props.username.toLowerCase()
       ? props.whiteResult
@@ -44,13 +41,6 @@ const ChesscomGameAccordion: FC<Props> = (props) => {
       points={getPoints(ourResult)}
     />
   )
-
-  const supabase = createBrowserClient()
-
-  const save = async () => {
-    const {error} = await supabase.from('games').update({notes}).eq('id', props.id)
-    console.log({error})
-  }
 
   return (
     <Accordion
@@ -69,7 +59,7 @@ const ChesscomGameAccordion: FC<Props> = (props) => {
 
         <Tags options={props.options} tags={props.tags} gameId={props.id} />
 
-        <Notes gameId={props.id} {...{notes, setNotes, save}} />
+        <Notes gameId={props.id} savedNotes={props.notes} />
       </div>
     </Accordion>
   )
