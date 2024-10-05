@@ -1,4 +1,5 @@
 import {createBrowserClient} from '@/app/lib/supabase/client'
+import SectionHeader from '@/app/ui/SectionHeader'
 import {FC, useState} from 'react'
 import {MultiValue} from 'react-select'
 import CreatableSelect from 'react-select/creatable'
@@ -26,6 +27,8 @@ const Tags: FC<Props> = (props) => {
 
   return (
     <div>
+      <SectionHeader title="Takeaways" description="Select tags or create your own" />
+
       <CreatableSelect
         isMulti
         isDisabled={loading}

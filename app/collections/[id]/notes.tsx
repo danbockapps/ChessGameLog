@@ -1,5 +1,6 @@
 import {createBrowserClient} from '@/app/lib/supabase/client'
 import Button from '@/app/ui/button'
+import SectionHeader from '@/app/ui/SectionHeader'
 import {FC, useState} from 'react'
 
 interface Props {
@@ -14,6 +15,10 @@ const Notes: FC<Props> = (props) => {
 
   return (
     <div className="flex flex-col">
+      <SectionHeader
+        title="Notes"
+        description="Any thoughts you want to remember about this game"
+      />
       <textarea
         className="w-full h-full p-2 mb-2 border"
         value={notes ?? ''}
