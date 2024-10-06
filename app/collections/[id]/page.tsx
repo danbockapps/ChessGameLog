@@ -1,19 +1,39 @@
 import {createServerClient} from '@/app/lib/supabase/server'
 import {captionClassNames} from '@/app/ui/SectionHeader'
 import Link from 'next/link'
+import {FC} from 'react'
 import {ChesscomResult} from './actions/importChesscomGames'
 import ChesscomGameAccordion from './chesscom/gameAccordion'
 import LichessGameAccordion from './lichess/gameAccordion'
 import RefreshButton from './refreshButton'
 import {Tag} from './tags'
 
-export default async function Collection({params: {id}}: {params: {id: string}}) {
+interface Props {
+  params: {id: string}
+  searchParams: {page: string}
+}
+
+const PAGE_SIZE = 50
+
+const Collection: FC<Props> = async (props) => {
   const supabase = createServerClient()
   const user = await supabase.auth.getUser()
+  const page = parseInt(props.searchParams.page) || 1
 
   const [collectionsResult, gamesResult, tagsResult] = await Promise.all([
-    supabase.from('collections').select('name,username,site,last_refreshed').eq('id', id).single(),
-    supabase.from('games').select().eq('collection_id', id),
+    supabase
+      .from('collections')
+      .select('name,username,site,last_refreshed')
+      .eq('id', props.params.id)
+      .single(),
+
+    supabase
+      .from('games')
+      .select()
+      .eq('collection_id', props.params.id)
+      .order('game_dttm', {ascending: false})
+      .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1),
+
     supabase
       .from('tags')
       .select('id, name, games ( id )')
@@ -28,43 +48,45 @@ export default async function Collection({params: {id}}: {params: {id: string}})
     tagsResult.data?.filter((t) => t.games.some((ga) => ga.id === id)).map((t) => t.id) ?? []
 
   const games =
-    gamesResult.data
-      ?.map((g) => ({
-        id: g.id,
-        url: g.url,
-        lichessGameId: g.lichess_game_id,
-        gameDttm: g.game_dttm && new Date(g.game_dttm),
-        whiteUsername: g.white_username,
-        blackUsername: g.black_username,
-        whiteResult: g.white_result as ChesscomResult,
-        blackResult: g.black_result as ChesscomResult,
-        winner: g.winner,
-        eco: g.eco,
-        timeControl: g.time_control,
-        clockInitial: g.clock_initial,
-        clockIncrement: g.clock_increment,
-        fen: g.fen,
-        notes: g.notes,
-      }))
-      .sort((a, b) => (a.gameDttm && b.gameDttm ? (b.gameDttm > a.gameDttm ? 1 : -1) : 0))
-      .filter((_g, i) => i < 5) ?? [] // TODO paging
+    gamesResult.data?.map((g) => ({
+      id: g.id,
+      url: g.url,
+      lichessGameId: g.lichess_game_id,
+      gameDttm: g.game_dttm && new Date(g.game_dttm),
+      whiteUsername: g.white_username,
+      blackUsername: g.black_username,
+      whiteResult: g.white_result as ChesscomResult,
+      blackResult: g.black_result as ChesscomResult,
+      winner: g.winner,
+      eco: g.eco,
+      timeControl: g.time_control,
+      clockInitial: g.clock_initial,
+      clockIncrement: g.clock_increment,
+      fen: g.fen,
+      notes: g.notes,
+    })) ?? []
 
   return (
     <div className="p-4">
       <Link href="/collections">⬅ Collections</Link>
-
       <div className="py-6 flex justify-between items-center">
         <h1 className="text-xl">{name ?? ''}</h1>
 
-        <p className={`${captionClassNames} ml-auto mr-4`}>
-          Last refreshed: {lastRefreshed?.toLocaleString() ?? 'Never'}
-        </p>
+        {site && username && page === 1 && (
+          <>
+            <p className={`${captionClassNames} ml-auto mr-4`}>
+              Last refreshed: {lastRefreshed?.toLocaleString() ?? 'Never'}
+            </p>
+            <RefreshButton collectionId={props.params.id} {...{site, username, lastRefreshed}} />
+          </>
+        )}
 
-        {site && username && (
-          <RefreshButton collectionId={id} {...{site, username, lastRefreshed}} />
+        {page > 1 && (
+          <Link className="underline" href={`/collections/${props.params.id}`}>
+            Back to first page
+          </Link>
         )}
       </div>
-
       <div>
         {games.map(
           (g) =>
@@ -108,6 +130,18 @@ export default async function Collection({params: {id}}: {params: {id: string}})
             )),
         )}
       </div>
+
+      <div className="py-6 flex gap-4 justify-center underline">
+        {[...Array(page - 1)].map((_, i) => (
+          <Link key={i} href={`/collections/${props.params.id}?page=${i + 1}`}>
+            {i + 1}
+          </Link>
+        ))}
+
+        <Link href={`/collections/${props.params.id}?page=${page + 1}`}>Next page</Link>
+      </div>
     </div>
   )
 }
+
+export default Collection
