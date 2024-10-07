@@ -3,15 +3,13 @@ import {createServerClient} from './lib/supabase/server'
 
 export default async function Home() {
   console.log('Home')
-  console.time('fetch')
-  const lichessData = await fetch('https://lichess.org/api/player').then((res) => res.json())
-  console.timeEnd('fetch')
 
   const supabase = createServerClient()
 
-  const {data} = await supabase.auth.getUser()
+  //@ts-ignore
+  const qr = await supabase.from('test').select('*').single()
 
-  if (data?.user) redirect('/collections')
+  console.log('qr', qr)
 
-  return <main>{JSON.stringify(lichessData)}</main>
+  return <main>{JSON.stringify(qr)}</main>
 }
