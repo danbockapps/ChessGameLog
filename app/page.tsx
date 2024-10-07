@@ -1,9 +1,6 @@
-import {redirect} from 'next/navigation'
 import {createServerClient} from './lib/supabase/server'
 
 export default async function Home() {
-  console.log('Home')
-
   const supabase = createServerClient()
 
   //@ts-ignore
@@ -11,5 +8,5 @@ export default async function Home() {
 
   console.log('qr', qr)
 
-  return <main>{JSON.stringify(qr)}</main>
+  return <main>You are not logged in.</main>
 }
