@@ -3,10 +3,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: ghcr.io/danbockapps/chessgamelog-nextjs:latest
     ports:
-      - "3001:3001"
+      - "3000:3000"
     networks:
       - net739
+    platform: linux/x86_64
    
 networks:
   net739:
