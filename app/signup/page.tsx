@@ -1,9 +1,9 @@
 'use client'
 
-import {AuthResponse} from '@supabase/supabase-js'
 import React, {useState} from 'react'
 import {createBrowserClient} from '../lib/supabase/client'
 import Button from '../ui/button'
+import {signup} from './actions'
 
 const SignUpPage: React.FC = () => {
   const [email, setEmail] = useState('')
@@ -24,7 +24,7 @@ const SignUpPage: React.FC = () => {
   const disabled = ['loading', 'success'].includes(status)
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-yellow-50 to-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
         <form>
@@ -67,32 +67,25 @@ const SignUpPage: React.FC = () => {
 
           <Button
             fullWidth
-            onClick={(e) => {
-              e.preventDefault()
-              setStatus('loading')
-              setErrorMessage('')
-
-              supabase.auth
-                .signUp({email, password})
-                .then((data: AuthResponse) => {
-                  console.log('data', data)
-
-                  if (data.error) {
-                    setErrorMessage(data.error.message)
-                    setStatus('error')
-                  } else {
-                    setStatus('success')
-                  }
-                })
-                .catch((error: Error) => {
-                  console.log('error')
-                  console.error({error})
-                  setStatus('error')
-                  setErrorMessage(error.message)
-                })
-            }}
             type="submit"
             loading={status === 'loading'}
+            disabled={status === 'success'}
+            onClick={async () => {
+              setErrorMessage('')
+              setStatus('loading')
+              try {
+                await signup(email, password)
+                setStatus('success')
+              } catch (error) {
+                setStatus('error')
+
+                if (error instanceof Error) {
+                  setErrorMessage(error.message)
+                } else {
+                  setErrorMessage('An unknown error occurred')
+                }
+              }
+            }}
           >
             Sign Up
           </Button>
