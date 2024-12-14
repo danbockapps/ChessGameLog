@@ -19,8 +19,6 @@ const SignUpPage: React.FC = () => {
     setPassword(e.target.value)
   }
 
-  const supabase = createBrowserClient()
-
   const disabled = ['loading', 'success'].includes(status)
 
   return (
