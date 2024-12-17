@@ -20,8 +20,6 @@ interface Props {
   lichessGameId: string
   fen: string
   notes: string | null
-  options: Tag[]
-  tags: number[]
 }
 
 const {cardClassName, headerClassName, contentClassName} = gameAccordionClassNames
@@ -48,7 +46,7 @@ const LichessGameAccordion: FC<Props> = (props) => {
         src={`https://lichess.org/embed/game/${props.lichessGameId}/${ourColor}`}
       />
 
-      <Tags options={props.options} tags={props.tags} gameId={props.id} />
+      <Tags gameId={props.id} />
       <Notes gameId={props.id} savedNotes={props.notes} />
     </Accordion>
   )

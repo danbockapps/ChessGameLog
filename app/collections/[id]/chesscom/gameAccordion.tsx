@@ -22,8 +22,6 @@ interface Props {
   url: string
   fen: string
   notes: string | null
-  options: Tag[]
-  tags: number[]
 }
 
 const {cardClassName, headerClassName, contentClassName} = gameAccordionClassNames
@@ -54,7 +52,7 @@ const ChesscomGameAccordion: FC<Props> = (props) => {
         fen={props.fen}
       />
 
-      <Tags options={props.options} tags={props.tags} gameId={props.id} />
+      <Tags gameId={props.id} />
       <Notes gameId={props.id} savedNotes={props.notes} />
     </Accordion>
   )

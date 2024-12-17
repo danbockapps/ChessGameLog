@@ -1,12 +1,11 @@
 import {createBrowserClient} from '@/app/lib/supabase/client'
 import SectionHeader, {captionClassNames} from '@/app/ui/SectionHeader'
-import {FC, useState} from 'react'
+import {FC, useCallback, useEffect, useState} from 'react'
 import {MultiValue} from 'react-select'
 import CreatableSelect from 'react-select/creatable'
+import {useAppContext} from '../context'
 
 interface Props {
-  options: Tag[]
-  tags: number[]
   gameId: number
 }
 
@@ -16,11 +15,40 @@ const Tags: FC<Props> = (props) => {
   const [values, setValues] = useState<MultiValue<Tag> | null>()
   const [loading, setLoading] = useState(false)
   const [beenSaved, setBeenSaved] = useState(false)
+  const [options, setOptions] = useState<Tag[]>([])
+  const [selectedTagIds, setSelectedTagIds] = useState<number[]>([])
+  const {user} = useAppContext()
   const supabase = createBrowserClient()
+
+  const refresh = useCallback(async () => {
+    if (user) {
+      supabase
+        .from('tags')
+        .select('id, name')
+        .or(`owner_id.eq.${user.id}, public.eq.1`)
+        .then(({data}) => setOptions(data ?? []))
+
+      supabase
+        .from('game_tag')
+        .select('tag_id')
+        .eq('game_id', props.gameId)
+        .then(({data}) => {
+          setSelectedTagIds(data?.map((d) => d.tag_id) ?? [])
+        })
+    }
+  }, [supabase, user, props.gameId]) // None of these 3 ever change
+
+  useEffect(() => {
+    refresh()
+  }, [refresh])
+
+  console.log({options})
 
   const selectedOptions =
     values ??
-    (props.tags.map((tagId) => props.options.find((tag) => tag.id === tagId)) as MultiValue<Tag>)
+    (selectedTagIds.map((tagId) => options.find((tag) => tag.id === tagId)) as MultiValue<Tag>)
+
+  console.log({selectedOptions})
 
   const insertGameTag = async (tagId: number, gameId: number) => {
     await supabase.from('game_tag').insert({tag_id: tagId, game_id: gameId})
@@ -61,10 +89,11 @@ const Tags: FC<Props> = (props) => {
           setLoading(true)
           const {data} = await supabase.from('tags').insert({name: inputValue}).select('id')
           if (data && data.length !== 0) await insertGameTag(data[0]?.id, props.gameId)
+          refresh() // TODO await this
           setBeenSaved(true)
           setLoading(false)
         }}
-        options={props.options}
+        {...{options}}
         getOptionValue={({id}) => `${id}`}
         getOptionLabel={({name}) => name ?? ''}
       />

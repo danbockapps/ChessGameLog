@@ -20,7 +20,7 @@ const Collection: FC<Props> = async (props) => {
   const user = await supabase.auth.getUser()
   const page = parseInt(props.searchParams.page) || 1
 
-  const [collectionsResult, gamesResult, tagsResult] = await Promise.all([
+  const [collectionsResult, gamesResult] = await Promise.all([
     supabase
       .from('collections')
       .select('name,username,site,last_refreshed')
@@ -33,19 +33,10 @@ const Collection: FC<Props> = async (props) => {
       .eq('collection_id', props.params.id)
       .order('game_dttm', {ascending: false})
       .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1),
-
-    supabase
-      .from('tags')
-      .select('id, name, games ( id )')
-      .or(`owner_id.eq.${user.data.user?.id}, public.eq.1`),
   ])
 
   const {name, username, site, last_refreshed} = collectionsResult.data ?? {}
   const lastRefreshed = last_refreshed ? new Date(last_refreshed) : null
-  const options: Tag[] = tagsResult.data?.map((t) => ({id: t.id, name: t.name})) ?? []
-
-  const getTags = (id: number) =>
-    tagsResult.data?.filter((t) => t.games.some((ga) => ga.id === id)).map((t) => t.id) ?? []
 
   const games =
     gamesResult.data?.map((g) => ({
@@ -106,8 +97,6 @@ const Collection: FC<Props> = async (props) => {
                 url={g.url!}
                 fen={g.fen!}
                 notes={g.notes}
-                {...{options}}
-                tags={getTags(g.id)}
               />
             ) : (
               <LichessGameAccordion
@@ -124,8 +113,6 @@ const Collection: FC<Props> = async (props) => {
                 lichessGameId={g.lichessGameId!}
                 fen={g.fen!}
                 notes={g.notes}
-                {...{options}}
-                tags={getTags(g.id)}
               />
             )),
         )}

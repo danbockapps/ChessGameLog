@@ -5,7 +5,16 @@ import CollectionCard from './collectionCard'
 export default async function PrivatePage() {
   const supabase = createServerClient()
 
-  const {data: collections} = await supabase.from('collections').select()
+  const {
+    data: {user},
+  } = await supabase.auth.getUser()
+
+  if (!user) return <>Please log in to continue.</>
+
+  const {data: collections} = await supabase
+    .from('collections')
+    .select()
+    .filter('owner_id', 'eq', user?.id)
 
   return (
     <div className="flex flex-wrap gap-4 p-4">
