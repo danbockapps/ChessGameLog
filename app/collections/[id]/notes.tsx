@@ -1,18 +1,30 @@
 import {createBrowserClient} from '@/app/lib/supabase/client'
 import Button from '@/app/ui/button'
 import SectionHeader, {captionClassNames} from '@/app/ui/SectionHeader'
-import {FC, useState} from 'react'
+import {FC, useEffect, useState} from 'react'
 
 interface Props {
   gameId: number
-  savedNotes: string | null
 }
 
 const Notes: FC<Props> = (props) => {
-  const [notes, setNotes] = useState(props.savedNotes ?? '')
+  const [notes, setNotes] = useState('')
   const [loading, setLoading] = useState(false)
   const [beenSaved, setBeenSaved] = useState(false)
   const supabase = createBrowserClient()
+
+  useEffect(() => {
+    setLoading(true)
+    supabase
+      .from('games')
+      .select('notes')
+      .eq('id', props.gameId)
+      .single()
+      .then(({data}) => {
+        setNotes(data?.notes ?? '')
+        setLoading(false)
+      })
+  }, [supabase, props.gameId]) // Neither of these 2 ever changes
 
   return (
     <div className="flex flex-col">

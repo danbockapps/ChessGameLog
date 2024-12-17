@@ -9,7 +9,7 @@ interface Props {
   gameId: number
 }
 
-export type Tag = {id: number; name: string | null}
+type Tag = {id: number; name: string | null}
 
 const Tags: FC<Props> = (props) => {
   const [values, setValues] = useState<MultiValue<Tag> | null>()

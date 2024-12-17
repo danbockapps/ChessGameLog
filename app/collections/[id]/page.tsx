@@ -6,7 +6,6 @@ import {ChesscomResult} from './actions/importChesscomGames'
 import ChesscomGameAccordion from './chesscom/gameAccordion'
 import LichessGameAccordion from './lichess/gameAccordion'
 import RefreshButton from './refreshButton'
-import {Tag} from './tags'
 
 interface Props {
   params: {id: string}
@@ -53,7 +52,6 @@ const Collection: FC<Props> = async (props) => {
       clockInitial: g.clock_initial,
       clockIncrement: g.clock_increment,
       fen: g.fen,
-      notes: g.notes,
     })) ?? []
 
   return (
@@ -95,7 +93,6 @@ const Collection: FC<Props> = async (props) => {
                 timeControl={g.timeControl!}
                 url={g.url!}
                 fen={g.fen!}
-                notes={g.notes}
               />
             ) : (
               <LichessGameAccordion
@@ -111,7 +108,6 @@ const Collection: FC<Props> = async (props) => {
                 clockIncrement={g.clockIncrement!}
                 lichessGameId={g.lichessGameId!}
                 fen={g.fen!}
-                notes={g.notes}
               />
             )),
         )}

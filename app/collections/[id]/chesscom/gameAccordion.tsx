@@ -1,13 +1,13 @@
 'use client'
 
 import Accordion from '@/app/ui/accordion'
+import {gameAccordionClassNames} from '@/app/ui/accordionClassNames'
 import {FC} from 'react'
 import {ChesscomResult} from '../actions/importChesscomGames'
 import GameAccordionHeader from '../gameAccordionHeader'
 import Notes from '../notes'
-import Tags, {Tag} from '../tags'
+import Tags from '../tags'
 import Board from './board'
-import {gameAccordionClassNames} from '@/app/ui/accordionClassNames'
 
 interface Props {
   id: number
@@ -21,7 +21,6 @@ interface Props {
   timeControl: string
   url: string
   fen: string
-  notes: string | null
 }
 
 const {cardClassName, headerClassName, contentClassName} = gameAccordionClassNames
@@ -53,7 +52,7 @@ const ChesscomGameAccordion: FC<Props> = (props) => {
       />
 
       <Tags gameId={props.id} />
-      <Notes gameId={props.id} savedNotes={props.notes} />
+      <Notes gameId={props.id} />
     </Accordion>
   )
 }
