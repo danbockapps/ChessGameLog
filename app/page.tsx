@@ -5,12 +5,6 @@ import {createServerClient} from './lib/supabase/server'
 
 export default async function Home() {
   const supabase = createServerClient()
-
-  //@ts-ignore
-  const qr = await supabase.from('test').select('*').single()
-
-  console.log('qr', qr)
-
   const {data} = await supabase.auth.getUser()
 
   if (data?.user) redirect('/collections')
@@ -21,8 +15,14 @@ export default async function Home() {
         text-black"
     >
       <div className="text-center p-8 bg-black bg-opacity-10 rounded-lg shadow-lg">
-        <Image src={logo} alt="ChessLog Logo" width={150} height={150} className="mx-auto mb-4" />
-        <h1 className="text-4xl font-bold mb-4">Welcome to ChessLog</h1>
+        <Image
+          src={logo}
+          alt="chesslog.me Logo"
+          width={150}
+          height={150}
+          className="mx-auto mb-4"
+        />
+        <h1 className="text-4xl font-bold mb-4">Welcome to chesslog.me</h1>
         <p className="text-lg mb-6">Log and analyze your chess games.</p>
         <div className="flex space-x-4 justify-center">
           <a href="/login">

@@ -12,7 +12,7 @@ export default async function Layout({children}: Readonly<{children: React.React
   return user ? (
     <AppContextProvider initialValue={user}>
       <div className="flex justify-between items-center bg-gradient-to-r from-gray-800 to-gray-950 text-white h-16 pl-4">
-        <h1 className="text-xl font-bold">ChessLog</h1>
+        <h1 className="text-xl font-bold">chesslog.me</h1>
         <MainMenu />
       </div>
 
