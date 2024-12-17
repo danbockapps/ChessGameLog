@@ -2,7 +2,7 @@
 
 import Accordion from '@/app/ui/accordion'
 import {gameAccordionClassNames} from '@/app/ui/accordionClassNames'
-import {FC} from 'react'
+import {FC, useState} from 'react'
 import GameAccordionHeader from '../gameAccordionHeader'
 import Notes from '../notes'
 import Tags from '../tags'
@@ -21,9 +21,10 @@ interface Props {
   fen: string
 }
 
-const {cardClassName, headerClassName, contentClassName} = gameAccordionClassNames
+const {cardClassName, headerClassName, contentClassName, lichessClassName} = gameAccordionClassNames
 
 const LichessGameAccordion: FC<Props> = (props) => {
+  const [embed, setEmbed] = useState(true)
   const ourColor = props.whiteUsername === props.username ? 'white' : 'black'
   const ourResult = props.winner === 'draw' ? 0.5 : props.winner === ourColor ? 1 : 0
 
@@ -39,11 +40,17 @@ const LichessGameAccordion: FC<Props> = (props) => {
   )
 
   return (
-    <Accordion {...{header, cardClassName, headerClassName, contentClassName}}>
-      <iframe
-        className="lichess-iframe"
-        src={`https://lichess.org/embed/game/${props.lichessGameId}/${ourColor}`}
-      />
+    <Accordion
+      {...{header, cardClassName, headerClassName}}
+      contentClassName={`${embed ? lichessClassName : ''} ${contentClassName}`}
+    >
+      <div>
+        {/* TODO switch */}
+        <iframe
+          className="lichess-iframe"
+          src={`https://lichess.org/embed/game/${props.lichessGameId}/${ourColor}`}
+        />
+      </div>
 
       <Tags gameId={props.id} />
       <Notes gameId={props.id} />
