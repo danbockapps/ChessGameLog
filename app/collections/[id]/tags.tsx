@@ -22,19 +22,13 @@ const Tags: FC<Props> = (props) => {
 
   const refresh = useCallback(async () => {
     if (user) {
-      supabase
-        .from('tags')
-        .select('id, name')
-        .or(`owner_id.eq.${user.id}, public.eq.1`)
-        .then(({data}) => setOptions(data ?? []))
+      const [newOptions, newSelectedTagIds] = await Promise.all([
+        supabase.from('tags').select('id, name').or(`owner_id.eq.${user.id}, public.eq.1`),
+        supabase.from('game_tag').select('tag_id').eq('game_id', props.gameId),
+      ])
 
-      supabase
-        .from('game_tag')
-        .select('tag_id')
-        .eq('game_id', props.gameId)
-        .then(({data}) => {
-          setSelectedTagIds(data?.map((d) => d.tag_id) ?? [])
-        })
+      setOptions(newOptions.data ?? [])
+      setSelectedTagIds(newSelectedTagIds.data?.map((d) => d.tag_id) ?? [])
     }
   }, [supabase, user, props.gameId]) // None of these 3 ever change
 
@@ -89,7 +83,7 @@ const Tags: FC<Props> = (props) => {
           setLoading(true)
           const {data} = await supabase.from('tags').insert({name: inputValue}).select('id')
           if (data && data.length !== 0) await insertGameTag(data[0]?.id, props.gameId)
-          refresh() // TODO await this
+          await refresh()
           setBeenSaved(true)
           setLoading(false)
         }}

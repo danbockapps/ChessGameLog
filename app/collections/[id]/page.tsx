@@ -17,7 +17,6 @@ const PAGE_SIZE = 50
 
 const Collection: FC<Props> = async (props) => {
   const supabase = createServerClient()
-  const user = await supabase.auth.getUser()
   const page = parseInt(props.searchParams.page) || 1
 
   const [collectionsResult, gamesResult] = await Promise.all([
