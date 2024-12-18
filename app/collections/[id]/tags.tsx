@@ -36,13 +36,9 @@ const Tags: FC<Props> = (props) => {
     refresh()
   }, [refresh])
 
-  console.log({options})
-
   const selectedOptions =
     values ??
     (selectedTagIds.map((tagId) => options.find((tag) => tag.id === tagId)) as MultiValue<Tag>)
-
-  console.log({selectedOptions})
 
   const insertGameTag = async (tagId: number, gameId: number) => {
     await supabase.from('game_tag').insert({tag_id: tagId, game_id: gameId})

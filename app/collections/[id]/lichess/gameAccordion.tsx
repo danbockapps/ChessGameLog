@@ -49,22 +49,21 @@ const LichessGameAccordion: FC<Props> = (props) => {
       <div>
         <FormControlLabel
           className="mb-1"
-          control={<Switch />}
+          control={<Switch checked={embed} onChange={() => setEmbed(!embed)} />}
           label="Lichess native board"
-          onChange={() => setEmbed(!embed)}
         />
 
         {embed ? (
+          <iframe
+            className="lichess-iframe"
+            src={`https://lichess.org/embed/game/${props.lichessGameId}/${ourColor}`}
+          />
+        ) : (
           <Board
             type="lichess"
             lichessGameId={props.lichessGameId}
             fen={props.fen}
             orientation={ourColor}
-          />
-        ) : (
-          <iframe
-            className="lichess-iframe"
-            src={`https://lichess.org/embed/game/${props.lichessGameId}/${ourColor}`}
           />
         )}
       </div>
