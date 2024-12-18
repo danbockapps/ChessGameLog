@@ -49,14 +49,18 @@ const Board: FC<ChesscomProps | LichessProps> = (props) => {
   const forwardButtonsDisabled =
     disabled || !moves || currentMove === undefined || currentMove >= moves.length
 
+  const [customDarkSquareStyle, customLightSquareStyle] =
+    props.type === 'chess.com'
+      ? [{backgroundColor: '#779955'}, {backgroundColor: '#e9eecd'}]
+      : [undefined, undefined]
+
   return (
     <div>
       <Chessboard
         arePiecesDraggable={false}
         boardOrientation={props.orientation}
         position={moves ? chess.current.fen() : props.fen}
-        customDarkSquareStyle={{backgroundColor: '#779955'}}
-        customLightSquareStyle={{backgroundColor: '#e9eecd'}}
+        {...{customDarkSquareStyle, customLightSquareStyle}}
       />
 
       <div className="py-2 flex">
