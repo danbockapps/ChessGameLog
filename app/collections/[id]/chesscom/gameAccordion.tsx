@@ -45,8 +45,10 @@ const ChesscomGameAccordion: FC<Props> = (props) => {
   return (
     <Accordion {...{header, cardClassName, headerClassName, contentClassName}}>
       <Board
-        whiteUsername={props.whiteUsername}
-        username={props.username}
+        type="chess.com"
+        orientation={
+          props.whiteUsername.toLowerCase() === props.username.toLowerCase() ? 'white' : 'black'
+        }
         url={props.url}
         fen={props.fen}
       />

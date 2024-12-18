@@ -2,7 +2,9 @@
 
 import Accordion from '@/app/ui/accordion'
 import {gameAccordionClassNames} from '@/app/ui/accordionClassNames'
+import {FormControlLabel, Switch} from '@mui/material'
 import {FC, useState} from 'react'
+import Board from '../chesscom/board'
 import GameAccordionHeader from '../gameAccordionHeader'
 import Notes from '../notes'
 import Tags from '../tags'
@@ -45,11 +47,26 @@ const LichessGameAccordion: FC<Props> = (props) => {
       contentClassName={`${embed ? lichessClassName : ''} ${contentClassName}`}
     >
       <div>
-        {/* TODO switch */}
-        <iframe
-          className="lichess-iframe"
-          src={`https://lichess.org/embed/game/${props.lichessGameId}/${ourColor}`}
+        <FormControlLabel
+          className="mb-1"
+          control={<Switch />}
+          label="Lichess native board"
+          onChange={() => setEmbed(!embed)}
         />
+
+        {embed ? (
+          <Board
+            type="lichess"
+            lichessGameId={props.lichessGameId}
+            fen={props.fen}
+            orientation={ourColor}
+          />
+        ) : (
+          <iframe
+            className="lichess-iframe"
+            src={`https://lichess.org/embed/game/${props.lichessGameId}/${ourColor}`}
+          />
+        )}
       </div>
 
       <Tags gameId={props.id} />

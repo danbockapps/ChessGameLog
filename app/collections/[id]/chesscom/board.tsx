@@ -1,24 +1,44 @@
 import {Chess} from 'chess.js'
 import {FC, useRef, useState} from 'react'
-import getSingleChesscomGame, {ChessJsMoveParam} from '../actions/getSingleChesscomGame'
 import {Chessboard} from 'react-chessboard'
+import getSingleChesscomGame from '../actions/getSingleChesscomGame'
+import getSingleLichessGame from '../actions/getSingleLichessGame'
 
-interface Props {
-  whiteUsername: string
-  username: string
-  url: string
+interface BaseProps {
+  orientation: 'white' | 'black'
   fen: string
 }
 
-const Board: FC<Props> = (props) => {
+type ChesscomProps = BaseProps & {
+  type: 'chess.com'
+  url: string
+}
+
+type LichessProps = BaseProps & {
+  type: 'lichess'
+  lichessGameId: string
+}
+
+const Board: FC<ChesscomProps | LichessProps> = (props) => {
   const chess = useRef<Chess>(new Chess())
   const [moves, setMoves] = useState<ChessJsMoveParam[]>()
   const [currentMove, setCurrentMove] = useState<number>()
   const [disabled, setDisabled] = useState(false)
 
+  const getGame = () => {
+    switch (props.type) {
+      case 'chess.com':
+        return getSingleChesscomGame(props.url)
+      case 'lichess':
+        return getSingleLichessGame(props.lichessGameId)
+      default:
+        throw new Error('Invalid game type')
+    }
+  }
+
   const loadGame = async () => {
     setDisabled(true)
-    const res = await getSingleChesscomGame(props.url)
+    const res = await getGame()
     setMoves(res)
     setDisabled(false)
     return res
@@ -33,9 +53,7 @@ const Board: FC<Props> = (props) => {
     <div>
       <Chessboard
         arePiecesDraggable={false}
-        boardOrientation={
-          props.whiteUsername.toLowerCase() === props.username.toLowerCase() ? 'white' : 'black'
-        }
+        boardOrientation={props.orientation}
         position={moves ? chess.current.fen() : props.fen}
         customDarkSquareStyle={{backgroundColor: '#779955'}}
         customLightSquareStyle={{backgroundColor: '#e9eecd'}}
@@ -110,5 +128,7 @@ const Board: FC<Props> = (props) => {
     </div>
   )
 }
+
+export type ChessJsMoveParam = string | {from: string; to: string; promotion?: string}
 
 export default Board

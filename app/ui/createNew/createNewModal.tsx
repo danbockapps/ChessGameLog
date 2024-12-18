@@ -1,10 +1,9 @@
-import {createBrowserClient} from '@/app/lib/supabase/client'
 import {FC, useEffect, useState} from 'react'
 import Modal from '../modal'
+import {createCollection} from './actions'
 import StepName from './stepName'
 import StepType from './stepType'
 import StepUsername from './stepUsername'
-import {createCollection} from './actions'
 
 interface Props {
   isOpen: boolean

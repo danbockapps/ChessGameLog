@@ -1,8 +1,7 @@
 'use server'
 
 import {PieceSymbol, Square} from 'chess.js'
-
-export type ChessJsMoveParam = {from: string; to: string; promotion?: string}
+import {ChessJsMoveParam} from '../chesscom/board'
 
 const getSingleChesscomGame = async (url: string) => {
   const response = await fetch(`https://www.chess.com/callback/live/game/${url.split('/').pop()}`)
