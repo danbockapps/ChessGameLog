@@ -50,7 +50,7 @@ const LichessGameAccordion: FC<Props> = (props) => {
         <FormControlLabel
           className="mb-1"
           control={<Switch checked={embed} onChange={() => setEmbed(!embed)} />}
-          label="Lichess native board"
+          label="Lichess embedded board"
         />
 
         {embed ? (
