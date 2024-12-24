@@ -1,26 +1,15 @@
 'use client'
 
-import {useRouter} from 'next/navigation'
 import {FC, useState} from 'react'
-import {createBrowserClient} from '../lib/supabase/client'
+import {logout} from '../login/actions'
 import {useAppContext} from './context'
 
 const MainMenu: FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const supabase = createBrowserClient()
-  const router = useRouter()
   const {user} = useAppContext()
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
-  }
-
-  const handleSignout = async () => {
-    const {error} = await supabase.auth.signOut()
-    if (error) console.log('Error signing out:', error.message)
-
-    console.log('routerpush', {error}, supabase.auth.getUser())
-    router.push('/')
   }
 
   return (
@@ -48,10 +37,12 @@ const MainMenu: FC = () => {
             <p className="text-gray-700">{user.email}</p>
           </div>
           <button
-            onClick={handleSignout}
+            // If you just do onClick={logout}, the click event will be passed to the logout
+            // function, and you get an error because you can't pass all that to a server action.
+            onClick={() => logout()}
             className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
           >
-            Sign Out
+            Log out
           </button>
         </div>
       )}
