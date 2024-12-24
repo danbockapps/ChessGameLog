@@ -4,6 +4,7 @@ import {FC, useCallback, useEffect, useState} from 'react'
 import {MultiValue} from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import {useAppContext} from '../context'
+import {deleteGameTags, insertGameTag, insertTag} from './actions/crudActions'
 
 interface Props {
   gameId: number
@@ -40,10 +41,6 @@ const Tags: FC<Props> = (props) => {
     values ??
     (selectedTagIds.map((tagId) => options.find((tag) => tag.id === tagId)) as MultiValue<Tag>)
 
-  const insertGameTag = async (tagId: number, gameId: number) => {
-    await supabase.from('game_tag').insert({tag_id: tagId, game_id: gameId})
-  }
-
   return (
     <div>
       <SectionHeader title="Takeaways" description="Select tags or create your own" />
@@ -59,14 +56,10 @@ const Tags: FC<Props> = (props) => {
           const newIds = newValue.map((v) => v.id)
 
           if (oldIds.length > newIds.length) {
-            await supabase
-              .from('game_tag')
-              .delete()
-              .eq('game_id', props.gameId)
-              .eq(
-                'tag_id',
-                oldIds.filter((id) => !newIds.includes(id)),
-              )
+            await deleteGameTags(
+              props.gameId,
+              oldIds.filter((id) => !newIds.includes(id)),
+            )
           } else if (oldIds.length < newIds.length) {
             await insertGameTag(newIds.filter((id) => !oldIds.includes(id))[0], props.gameId)
           }
@@ -77,7 +70,7 @@ const Tags: FC<Props> = (props) => {
         }}
         onCreateOption={async (inputValue) => {
           setLoading(true)
-          const {data} = await supabase.from('tags').insert({name: inputValue}).select('id')
+          const data = await insertTag(inputValue)
           if (data && data.length !== 0) await insertGameTag(data[0]?.id, props.gameId)
           await refresh()
           setBeenSaved(true)

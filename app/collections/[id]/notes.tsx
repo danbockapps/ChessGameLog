@@ -2,6 +2,7 @@ import {createBrowserClient} from '@/app/lib/supabase/client'
 import Button from '@/app/ui/button'
 import SectionHeader, {captionClassNames} from '@/app/ui/SectionHeader'
 import {FC, useEffect, useState} from 'react'
+import {saveNotes} from './actions/crudActions'
 
 interface Props {
   gameId: number
@@ -49,7 +50,7 @@ const Notes: FC<Props> = (props) => {
           {...{loading}}
           onClick={async () => {
             setLoading(true)
-            await supabase.from('games').update({notes}).eq('id', props.gameId)
+            await saveNotes(props.gameId, notes)
             setBeenSaved(true)
             setLoading(false)
           }}
