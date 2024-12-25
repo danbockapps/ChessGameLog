@@ -11,7 +11,7 @@ const CreateNew: FC = () => {
     <>
       <Card
         onClick={() => setIsOpen(true)}
-        className="w-96 h-48 flex items-center justify-center cursor-pointer"
+        className="md:w-80 h-48 flex items-center justify-center cursor-pointer"
       >
         <div className="text-center">
           <div className="text-4xl">+</div>

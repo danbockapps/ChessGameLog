@@ -17,7 +17,7 @@ export default async function PrivatePage() {
     .filter('owner_id', 'eq', user?.id)
 
   return (
-    <div className="flex flex-wrap gap-4 p-4">
+    <div className="flex gap-4 p-4 flex-col md:flex-wrap md:flex-row">
       {collections?.map((c) => (
         <CollectionCard key={c.id} id={c.id} title={c.name ?? ''}>
           {c.name}

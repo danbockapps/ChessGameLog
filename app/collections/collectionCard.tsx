@@ -11,7 +11,7 @@ interface Props {
 
 const CollectionCard: FC<Props> = (props) => (
   <Link href={`/collections/${props.id}`}>
-    <Card className={`w-96 h-48 ${props.className ?? ''}`}>
+    <Card className={`md:w-80 h-48 ${props.className ?? ''}`}>
       <div className="bg-yellow-900 text-white p-2 rounded-t-lg">{props.title}</div>
       <div className="p-4">{props.children}</div>
     </Card>
