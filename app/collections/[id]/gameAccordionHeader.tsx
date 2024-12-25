@@ -11,8 +11,13 @@ interface Props {
 
 const GameAccordionHeader: FC<Props> = (props) => (
   <>
-    <div className={`h-2 w-2 rounded ${getDotColor(props.points)}`} />
-    {props.whiteUsername} vs. {props.blackUsername}
+    {/* flex-none prevents the dot from getting squeezed when the usernames are long */}
+    <div className={`flex-none h-2 w-2 rounded ${getDotColor(props.points)}`} />
+
+    <div className="truncate">
+      {props.whiteUsername} vs. {props.blackUsername}
+    </div>
+
     <div className="text-gray-500">{props.timeControl}</div>
     <div className="hidden md:block ml-auto truncate max-w-sm text-gray-500">{props.opening}</div>
     <div className="ml-auto md:ml-0 text-gray-500">{getRelativeTime(props.gameDttm)}</div>
