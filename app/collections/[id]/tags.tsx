@@ -5,7 +5,7 @@ import {MultiValue} from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import {useAppContext} from '../context'
 import {deleteGameTags, insertGameTag, insertTag} from './actions/crudActions'
-import ManageTags from './manageTags'
+import ManageTags from './manageTags/manageTags'
 
 interface Props {
   gameId: number

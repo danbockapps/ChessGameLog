@@ -12,6 +12,7 @@ const SectionHeader: React.FC<Props> = ({title, description, link}) => {
   return (
     <div>
       <h3 className="text-lg pb-1">{title}</h3>
+
       <p className={`${captionClassNames} pb-3`}>
         {description}
 
