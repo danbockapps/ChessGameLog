@@ -5,6 +5,7 @@ import {MultiValue} from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import {useAppContext} from '../context'
 import {deleteGameTags, insertGameTag, insertTag} from './actions/crudActions'
+import ManageTags from './manageTags'
 
 interface Props {
   gameId: number
@@ -18,6 +19,7 @@ const Tags: FC<Props> = (props) => {
   const [beenSaved, setBeenSaved] = useState(false)
   const [options, setOptions] = useState<Tag[]>([])
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>([])
+  const [manageOpen, setManageOpen] = useState(false)
   const {user} = useAppContext()
   const supabase = createBrowserClient()
 
@@ -43,7 +45,12 @@ const Tags: FC<Props> = (props) => {
 
   return (
     <div>
-      <SectionHeader title="Takeaways" description="Select tags or create your own" />
+      <SectionHeader
+        title="Takeaways"
+        description="Select tags or create your own"
+        link={{text: 'Manage tags', onClick: () => setManageOpen(true)}}
+      />
+
       <CreatableSelect
         isMulti
         isDisabled={loading}
@@ -84,6 +91,8 @@ const Tags: FC<Props> = (props) => {
       <div className={`${captionClassNames} mt-5`}>
         {loading ? 'Saving...' : beenSaved ? '✓ Takeaways saved' : ''}
       </div>
+
+      <ManageTags open={manageOpen} close={() => setManageOpen(false)} />
     </div>
   )
 }
