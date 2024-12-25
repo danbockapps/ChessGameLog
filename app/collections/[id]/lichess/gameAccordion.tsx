@@ -28,7 +28,9 @@ const {cardClassName, headerClassName, contentClassName, lichessClassName} = gam
 const LichessGameAccordion: FC<Props> = (props) => {
   const [embed, setEmbed] = useState(true)
   const ourColor = props.whiteUsername === props.username ? 'white' : 'black'
-  const ourResult = props.winner === 'draw' ? 0.5 : props.winner === ourColor ? 1 : 0
+
+  const ourResult =
+    !props.winner || props.winner === 'draw' ? 0.5 : props.winner === ourColor ? 1 : 0
 
   const header = (
     <GameAccordionHeader
